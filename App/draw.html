@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+		<title>Drawing Pad</title>
+		
+		<!-- Home screen icons -->
+		<link rel="apple-touch-icon" sizes="57x57" href="icons/wu-57x57.png" />
+		<link rel="apple-touch-icon" sizes="72x72" href="icons/wu-72x72.png" />
+		<link rel="apple-touch-icon" sizes="114x114" href="icons/wu-114x114.png" />
+		
+		<!-- Start-up images -->
+			<!-- iPad 
+		<link rel="apple-touch-startup-image" href="starts/ipad-landscape.jpg" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)" />
+		<link rel="apple-touch-startup-image" href="starts/ipad-portrait.jpg" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)" />
+			 iPhone (retina) 
+		<link rel="apple-touch-startup-image" href="starts/iphone-retina.jpg" media="screen and (max-device-width: 640px)" />
+			-->
+		<link rel="icon" type="image/png" href="icons/favicon.png" />
+
+	</head>
+	<body>
+		<header>Drawing Pad</header>
+		<p id="notifications">Notifications</p>
+		<p> japanese: ひらがな </p>
+		<button id="canvasbtn" onclick="switchCanvas()">Layer 1 (click to change layer)</button>
+		<button id="intersect" onclick="intersection()">Intersection</button>
+		
+		<div id="canvasDiv" style="position: relative;">
+			<canvas id="canvas1" width="300" height="300" style="position: absolute; left: 0; top: 0; z-index: 0; opacity:0.5;"></canvas>
+			<canvas id="canvas2" width="300" height="300" style="position: absolute; left: 0; top: 0; z-index: 1; opacity:0.5;"></canvas>
+		</div>
+		<footer>
+		</footer>
+		<script src="draw.js"></script>
+	</body>
+</html>
