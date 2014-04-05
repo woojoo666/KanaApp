@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+		<title>Hiragana Draw</title>
+		
+		<!-- Home screen icons -->
+		<link rel="apple-touch-icon" sizes="57x57" href="icons/wu-57x57.png" />
+		<link rel="apple-touch-icon" sizes="72x72" href="icons/wu-72x72.png" />
+		<link rel="apple-touch-icon" sizes="114x114" href="icons/wu-114x114.png" />
+		
+		<!-- Start-up images -->
+			<!-- iPad 
+		<link rel="apple-touch-startup-image" href="starts/ipad-landscape.jpg" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)" />
+		<link rel="apple-touch-startup-image" href="starts/ipad-portrait.jpg" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)" />
+			 iPhone (retina) 
+		<link rel="apple-touch-startup-image" href="starts/iphone-retina.jpg" media="screen and (max-device-width: 640px)" />
+			-->
+		<link rel="icon" type="image/png" href="icons/favicon.png" />
+		
+		<style>
+	        @font-face {
+	          font-family: Kozuko;
+	          src: url(KozMinPro-Heavy.otf);
+	        }
+	        
+	        header{
+	        	font-family: Kozuko;
+	        	font-size: 30pt;
+	        }
+	        
+	        #notifications{
+	        	font-size:16pt;
+	        }
+
+			canvas{border: 3px solid;}
+	    </style>
+
+	</head>
+	<body onload="init()">
+		<header>ひらがな Draw</header>
+		<p id="notifications">Notifications</p>
+		<button id='mode' onclick="changeMode()">Training Mode</button>
+		<button onclick="done()">Done</button>
+		<br>
+		<canvas id="canvas" width="300" height="300"></canvas>
+
+		<footer>
+		</footer>
+		<script src="draw.js"></script>
+	</body>
+</html>
