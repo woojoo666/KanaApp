@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+<html> <!-- lang="en" manifest="final.manifest"> -->
+<head>
+		<meta charset="utf-8">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=0.5, user-scalable=0"/>
+		
+		<link rel="apple-touch-icon" sizes="57x57" href="icons/wu-57x57.png" />
+		<link rel="apple-touch-icon" sizes="72x72" href="icons/wu-72x72.png" />
+		<link rel="apple-touch-icon" sizes="114x114" href="icons/wu-114x114.png" />
+		<link rel="icon" type="image/png" href="icons/favicon.png" />
+		
+		<title>Hiragana Draw</title>
+		<style>
+			@font-face {
+				font-family: Kozuko;
+				src: url(KFhimaji.otf);
+			}
+	
+			body{
+				width: 600px;
+				height: 920px;
+				margin: 20px;
+				font-family: Kozuko;
+			}
+
+			textArea{width: 100%; border: 3px solid #999;font-family: Kozuko;}
+			audio{width: 100%;}
+			#selector{color:#999;}
+			
+			.boxsizingBorder {
+    				-webkit-box-sizing: border-box;
+				-moz-box-sizing: border-box;
+				box-sizing: border-box;
+			}
+			
+			.right {
+				float:right
+			}
+
+			.fadeout {
+				background-image:url('cover.png');
+				width: 640px;
+				height: 960px;				
+				position: absolute;
+				left:0px;
+				top:0px;
+				z-index: 2;
+
+  				-webkit-opacity: 1;
+  				-moz-opacity: 1;
+  				opacity: 1;
+
+				-webkit-transition: all 1s ease;
+  				-moz-transition: all 1s ease;
+  				-ms-transition: all 1s ease;
+  				-o-transition: all 1s ease;
+  				transition: all 1s ease;
+			}
+			
+			#resultsdiv{
+				width: 640px;
+				height: 960px;				
+				position: absolute;
+				left:0px;
+				top:0px;
+				z-index: 1;
+			}
+
+			.back {
+				position:absolute;
+				left:0px;
+				top:0px;
+				z-index: -1;
+			}
+			
+			#containr{border: 3px solid white; overflow:scroll; height:800px;}
+
+			span{color:white; font-size: 25px}
+			a {color: white; font-size: 50px}
+			selector{font-family: Kozuko;}
+			canvas{background-color: rgba(255,255,255,0.5);}
+
+		</style>
+</head>
+<body onload="init(); initTable(); jumpTo('main')">
+	<span id="cover" class="fadeout">
+		<p id="loading" style="text-align:center; font-size:50px; color:white; line-height:1300px;">Loading</p>
+	</span>
+	<img src="background.png" class="back">
+	
+	<div id="main">
+		<p style="text-align: center; font-size: 40px; color: white">ひらがな Strokes</p>
+		<audio id ="player" controls="controls">Your browser does not support audio tag</audio>
+		<br>
+		<textArea id="output" rows="1" cols="80" class="boxsizingBorder">Output</textArea>
+		<div>
+			<span onclick="next();">Next</span>
+			<span onclick="jumpTo('resultsdiv')">Results</span>
+			<span class="right">
+				<select id="selector" style="font-family: Kozuko"></select>
+				<span onclick="go()">Go</span>
+			</span>
+		</div>
+		<br>
+		<div id="canvasDiv">
+			<canvas id="canvas" height="600"></canvas>
+		</div>
+	</div>
+	
+	<div id="resultsdiv">
+		<span onclick="jumpTo('main')">Back</span>
+		<span id="spany">
+			<span>Show All: </span>
+			<span onclick="showAllCharacters();">Characters /</span>
+			<span onclick="showAllPercents();">Percentages</span>
+			<span>|</span>
+			<span onclick="clearAll()">Clear All</span>
+		</span>
+		<div id="containr" onmouseover="document.body.style.overflow='hidden';" onmouseout="document.body.style.overflow='auto';">
+			<table id="results"></table>
+	</div>
+	<script>
+		function jumpTo(page) {
+			var pages = document.body.childNodes;
+			for(var i = 0; i < pages.length; i++) {
+				if(pages[i].tagName == "DIV") {
+					pages[i].style.display = "none";
+				}
+			}
+			document.getElementById(page).style.display = "block";
+		}
+	</script>
+	<script src="maindiv.js"></script>
+	<script src="resultsdiv.js"></script>
+</body>
+</html>

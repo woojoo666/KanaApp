@@ -1,14 +1,29 @@
-﻿<!DOCTYPE HTML>
+<!DOCTYPE HTML>
 <html>
 <head>
 	<meta charset="utf-8">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=0.5, user-scalable=0"/>
 	<style>
-		div{overflow: hidden; text-align: center; whitespace: nowrap;}
+		div{overflow: hidden;text-align: center; whitespace: nowrap; margin:0; padding:0;}
+		.back {position:absolute; left:0px; top:0px; z-index: -1;}
+		body{width: 600px; height: 920px; margin: 20px;}
+		a{color:white; font-size: 25px}
+		#spany{float:right;}
+		span{color: white; font-size: 25px}
 	</style>
 </head>
 <body onload="initTable();">
+<img src="background.png" class="back">
 <a href="final styled.html">Back</a>
-<div id="containr" style="border: 3px solid; overflow:scroll;">
+<span id="spany">
+	<span>Show All: </span>
+	<span onclick="showAllCharacters();">Characters /</span>
+	<span onclick="showAllPercents();">Percentages</span>
+	<span>|</span>
+	<span onclick="clearAll()">Clear All</span>
+</span>
+<div id="containr" style="border: 3px solid white; overflow:scroll; height:800px;">
 	<table id="results"></table>
 </div>
 
@@ -33,8 +48,8 @@
 	"わ","を",
 	"ん"];
 
-	var cellWidth = 50;
-	maxFont = 60;
+	var cellWidth = 85;
+	maxFont = 85;
 	var cellspace = 20;
 
 	window.addEventListener('resize', resizeTable, false);	
@@ -51,8 +66,12 @@
 		results.cellpadding = results.border = "0";
 		results.cellSpacing = cellspace;
 
+		containr.style.overflow = "scroll";
+
 		//note: final cell width is cellWidth+2 for some reason
 		cols = Math.floor((containr.clientWidth - cellspace)/(cellWidth+2+cellspace));
+
+		containr.style.overflow = "auto";
 
 		var row = document.createElement("tr");
 		for(var i = 0; i < hiragana.length; i++) {
@@ -70,6 +89,7 @@
 			div.style.width = cellWidth + "px";
 			div.style.height = cellWidth + "px";
 			div.style.overflow = "hidden";
+			div.style.color = "white";
 			div.innerHTML = hiragana[i];
 			cell.appendChild(div);
 
@@ -96,17 +116,76 @@
 	function reveal(cell) {
 		var div = cell.myDiv;
 		var i = cell.index;
+		if (div.innerHTML == hiragana[i]) {
+			showPercent(cell);
+		} else {
+			showCharacter(cell);
+		}
+	}
+
+	function clearAll() {
+		var yes = confirm("Clear All Data?");
+		if (yes) {
+			for (var i = 0; i < hiragana.length; i++) {
+				var r = hiragana[i] + "r";
+				var t = hiragana[i] + "t";
+				localStorage.removeItem(r);
+				localStorage.removeItem(t);
+			}
+			showAllCharacters();
+		}
+	}
+
+	function showAllPercents() {
+		for (var i = 0; i < results.rows.length; i++) {
+			for(var j = 0; j < results.rows[i].cells.length; j++) {
+				showPercent(results.rows[i].cells[j]);
+			}
+		}
+	}
+
+	function showAllCharacters() {
+		for (var i = 0; i < results.rows.length; i++) {
+			for(var j = 0; j < results.rows[i].cells.length; j++) {
+				showCharacter(results.rows[i].cells[j]);
+			}
+		}
+	}
+
+	function showPercent(cell) {
+		var div = cell.myDiv;
+		var i = cell.index;
 		var r = hiragana[i] + "r";
 		var t = hiragana[i] + "t";
 		var score = (localStorage[t] > 0)? (localStorage[r]/localStorage[t]): "NA";
-		if (div.innerHTML == hiragana[i]) {
-			div.style.fontSize = Math.floor(maxFont*.5) + "px";
-			div.innerHTML = (score == "NA")? "NA" : Math.floor(100*score) + "%";
-		} else {
-			div.style.fontSize = ((score == "NA")? maxFont : Math.floor((1-(score*.5))*maxFont)) + "px";
-			div.innerHTML = hiragana[i];
-		}
+
+		div.style.fontSize = Math.floor(maxFont*.5) + "px";
+		var txt = (score == "NA")? "NA" : Math.floor(100*score) + "%";
+		div.innerHTML = "<p style='margin-top:0; margin-bottom:0'>" + txt + "</p>"
+		var clear = document.createElement('p');
+		clear.style.marginTop = 0;
+		clear.style.fontSize = Math.floor(maxFont/4) + "px";
+		clear.innerHTML = "clear";
+		clear.onclick = function() {
+			var yes = confirm("Clear Data for " + hiragana[i] + "?");
+			if (yes) {
+				localStorage.removeItem(r);
+				localStorage.removeItem(t);
+			}
+		};
+		div.appendChild(clear);
 	}
+
+	function showCharacter(cell) {
+		var div = cell.myDiv;
+		var i = cell.index;
+		var r = hiragana[i] + "r";
+		var t = hiragana[i] + "t";
+		var score = (localStorage[t] > 0)? (localStorage[r]/localStorage[t]): "NA";
+		div.style.fontSize = ((score == "NA")? maxFont : Math.floor((1-(score*.5))*maxFont)) + "px";
+		div.innerHTML = hiragana[i];
+	}
+
 </script>
 </body>
 </html>

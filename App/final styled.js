@@ -1,4 +1,4 @@
-﻿function $(id) {return document.getElementById(id);}
+function $(id) {return document.getElementById(id);}
 
 var canvas = $('canvas');
 var ctx;
@@ -25,7 +25,7 @@ var paths = [
 	'2 1',
 	'1 0o3',
 	'1 0v3v7o2o0',
-	'0 2o0o3',
+	'0 2o0o3 1',
 	'0o3',
 	'0 0 1 3o7',
 	'3v1',
@@ -85,6 +85,16 @@ var selector = $('selector');
 
 var minData = 3; //minimum data points
 
+var a=document.getElementsByTagName("a");
+for(var i=0;i<a.length;i++) {
+    if(!a[i].onclick && a[i].getAttribute("target") != "_blank") {
+        a[i].onclick=function() {
+                window.location=this.getAttribute("href");
+                return false; 
+        }
+    }
+}
+
 function init() {
     ctx = canvas.getContext('2d');
 
@@ -113,12 +123,35 @@ function init() {
 	player.volume = 0.5;
 
 	initCanvas();
+
+	$('cover').onclick = function() {fadeout();};
+	$('loading').innerHTML = "Click to Continue";
+	
+	
+//touchscreen
+   canvas.addEventListener("touchstart",touchstartHandler,false);
+   canvas.addEventListener("touchmove", touchmoveHandler,false);
+   canvas.addEventListener("touchend", touchendHandler, false);
+   canvas.addEventListener("touchcancel", touchcancelHandler,false);
+   
+   document.addEventListener('touchmove', preventScrollingHandler, false);
+
+}
+
+function preventScrollingHandler(event) {
+    event.preventDefault();
+}
+
+function fadeout() {
+	var cover = $("cover");
+	cover.style.opacity = "0";
+	cover.style.pointerEvents = "none";
 }
 
 function initCanvas() {
 	var border = 3;
 	ctx.canvas.width = $('canvasDiv').scrollWidth - border*2;
-	ctx.canvas.style.border = border + "px solid";
+	ctx.canvas.style.border = border + "px solid white";
 
     ctx.strokeStyle = "red";
     ctx.lineWidth   = 20;
@@ -133,7 +166,6 @@ function initCanvas() {
 }
 
 function next() {
-//	alert("next");
 	if (drawing) {
 		ctx.fillText(hiragana[current], canvas.width/2, canvas.height/2);
 		check();
@@ -151,7 +183,6 @@ function go() {
 
 function initChar() {
 	ctx.clearRect(0,0,canvas.width,canvas.height);
-//	ctx.fillText(hiragana[current],canvas.width/2,canvas.height/2);
 	output.innerHTML += "\n" + hiragana[current] + ": ";
 
 	path = paths[current].split(" ");
@@ -163,9 +194,7 @@ function initChar() {
 	drawing = true;
 }
 
-var started = false;
-canvas.onmousedown = function(e) {
-	if (!started) {
+function touchstartHandler(e){
 		var x = e.pageX - canvas.offsetLeft;
 		var y = e.pageY - canvas.offsetTop;
 		ctx.beginPath();		
@@ -175,11 +204,9 @@ canvas.onmousedown = function(e) {
 		prevY = y;
 		started = true;
 		progress = -1;
-	}
 };
 
-canvas.onmousemove = function(e) {
-	if (started) {
+function touchmoveHandler(e){
 		var x = e.pageX - canvas.offsetLeft;
 		var y = e.pageY - canvas.offsetTop;
 		ctx.lineTo(e.pageX - canvas.offsetLeft, e.pageY - canvas.offsetTop);
@@ -190,13 +217,6 @@ canvas.onmousemove = function(e) {
 		var d = Math.sqrt(changeX*changeX + changeY*changeY);
 		if (d > sensitivity) {
 			var cardinal = cardinalize(x-prevX,y-prevY);
-
-/*			ctx.beginPath();
-			ctx.strokeStyle = "blue";
-			ctx.moveTo(prevX, prevY);
-			var theta = (Math.PI/4)*cardinal;
-			ctx.lineTo(prevX + d*Math.cos(theta), prevY + d*Math.sin(theta));
-			ctx.stroke();*/
 			
 			prevX = x;
 			prevY = y;
@@ -206,13 +226,10 @@ canvas.onmousemove = function(e) {
 			ctx.moveTo(x, y);
 			
 			checkpoint(cardinal);
-
-		}
 	}
 };
 	
-canvas.onmouseup = function() {
-	started = false;
+function touchendHandler() {
 	if (currentStroke < path.length && (2*(progress+1)) > path[currentStroke].length) {
 //		alert("YAY");
 	} else {
@@ -220,6 +237,10 @@ canvas.onmouseup = function() {
 	}
 	currentStroke++;
 };
+
+function touchcancelHandler(event){
+	alert('The application has paused, click to continue');
+}
 
 function cardinalize(x, y) {
 	var theta = (y > 0)? Math.acos(x/Math.sqrt(x*x+y*y)) : 2*Math.PI - Math.acos(x/Math.sqrt(x*x+y*y));
