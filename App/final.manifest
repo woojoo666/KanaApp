@@ -3,12 +3,25 @@ CACHE MANIFEST
 # Version: 1.00
 
 CACHE:
-final style.html
-final styled.js
+final.html
+maindiv.js
+resultsdiv.js
 icons/favicon.png
-background.png
-cover.png
-KFhimaji.otf
+/iOS%20Web%20App/Finalfinalfinalfinal/KFhimaji.otf
+
+Images/Back%20Button.png
+Images/Background%20Scroll%20-%20bordered.png
+Images/Background%20Scroll%20-%20gradient.png
+Images/Continue.png
+Images/Header.png
+Images/Header2.png
+Images/Loading.png
+Images/Main%20Scroll%20-%20bordered.png
+Images/Playbutton%20Back.png
+Images/Playbutton%20Background.png
+Images/Playbutton%20Off.png
+Images/Playbutton%20On.png
+Images/Title%20Overlay.png
 
 sounds/1.mp3
 sounds/2.mp3
@@ -56,3 +69,28 @@ sounds/43.mp3
 sounds/44.mp3
 sounds/45.mp3
 sounds/46.mp3
+sounds/47.mp3
+sounds/48.mp3
+sounds/49.mp3
+sounds/50.mp3
+sounds/51.mp3
+sounds/52.mp3
+sounds/53.mp3
+sounds/54.mp3
+sounds/55.mp3
+sounds/56.mp3
+sounds/57.mp3
+sounds/58.mp3
+sounds/59.mp3
+sounds/60.mp3
+sounds/61.mp3
+sounds/62.mp3
+sounds/63.mp3
+sounds/64.mp3
+sounds/65.mp3
+sounds/66.mp3
+sounds/67.mp3
+sounds/68.mp3
+sounds/69.mp3
+sounds/70.mp3
+sounds/71.mp3

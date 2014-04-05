@@ -16,7 +16,7 @@
 		
 		containr.ontouchstart = function (event) {
 			prevY = event.pageY;
-		}
+		};
 		
 		containr.ontouchmove = function (event) {
 			var nextTop = containr.scrollTop + (prevY - event.pageY);
@@ -37,14 +37,12 @@
 			initTable();
 		}
 			
-	
 		function initTable() {
 			results.cellpadding = results.border = "0";
 			results.cellSpacing = cellspace;
 	
 			containr.style.overflow = "scroll";
-	
-			//note: final cell width is cellWidth+2 for some reason
+
 			cols = Math.floor((containr.clientWidth - cellspace)/(cellWidth+2+cellspace));
 	
 			containr.style.overflow = "auto";
@@ -53,8 +51,6 @@
 			for(var i = 0; i < hiragana.length; i++) {
 				var r = hiragana[i] + "r";
 				var t = hiragana[i] + "t";
-	//			localStorage[r] = 1;
-	//			localStorage[t] = 3;
 		
 				var cell = document.createElement("td");
 				cell.style.width = cellWidth + "px";
@@ -69,11 +65,6 @@
 				div.innerHTML = hiragana[i];
 				cell.appendChild(div);
 	
-				cell.myDiv = div;//WHOA WHATS HAPPENING, new property?
-				cell.index = i;
-	
-				cell.onclick = function() {reveal(this);};
-	
 				if (localStorage[t] > 0) {
 					var score = 1-(localStorage[r]*.5/localStorage[t]); //the smaller the better!
 					div.style.fontSize = Math.floor(score*maxFont) + "px";
@@ -87,16 +78,9 @@
 					row = document.createElement("tr");
 				}
 			}
-		}
-		
-		function reveal(cell) {
-			var div = cell.myDiv;
-			var i = cell.index;
-			if (div.innerHTML == hiragana[i]) {
-				showPercent(cell);
-			} else {
-				showCharacter(cell);
-			}
+			
+			initSecondTable();
+			showAllCharacters();
 		}
 	
 		function clearAll() {
@@ -108,56 +92,90 @@
 					localStorage.removeItem(r);
 					localStorage.removeItem(t);
 				}
-				showAllCharacters();
 			}
 		}
 	
 		function showAllPercents() {
-			for (var i = 0; i < results.rows.length; i++) {
-				for(var j = 0; j < results.rows[i].cells.length; j++) {
-					showPercent(results.rows[i].cells[j]);
-				}
-			}
+			results.style.display = "none";
+			listtable.style.display="block";
 		}
 	
 		function showAllCharacters() {
-			for (var i = 0; i < results.rows.length; i++) {
-				for(var j = 0; j < results.rows[i].cells.length; j++) {
-					showCharacter(results.rows[i].cells[j]);
-				}
-			}
+			results.style.display = "block";
+			listtable.style.display="none";		
 		}
+		
+function refresh() {
+	results.innerHTML = "";
+	listtable.innerHTML = "";
+	initTable();
+}
 	
-		function showPercent(cell) {
-			var div = cell.myDiv;
-			var i = cell.index;
-			var r = hiragana[i] + "r";
-			var t = hiragana[i] + "t";
-			var score = (localStorage[t] > 0)? (localStorage[r]/localStorage[t]): "NA";
+
+var listtable = document.getElementById('listtable');
+var totalwidth = 400;
+var maxwidth = 300;
+var minwidth = 10;
+
+function initSecondTable() {
+for (var i = 0; i < hiragana.length; i++) {
+
+	var r = hiragana[i] + "r";
+	var t = hiragana[i] + "t";
+	var score = (localStorage[t] > 0)? localStorage[r]/localStorage[t]: "NA";
+
+	var row = document.createElement('tr');
+	row.on = true;
+	row.index = i;
+	row.style.textAlign = "left";
+	var left = document.createElement('td');
+	left.innerHTML = hiragana[i] + ":";
+
+	var middle = document.createElement('td');
+	middle.style.width = totalwidth + "px";
+	var textspace = document.createElement('span');
+	textspace.style.float = "left";
+	textspace.style.textAlign = "right";
+	textspace.innerHTML = (localStorage[t] > 0)? Math.floor(score*100) + "%" : "NA";
+	textspace.style.width = (localStorage[t] > 0)? Math.floor(score*(maxwidth - minwidth) + minwidth) + "px": minwidth + "px";
+	middle.appendChild(textspace);
+
+	var right = document.createElement('td');
+	right.innerHTML = "On";
+	right.onclick = function() {toggle(this);};
 	
-			div.style.fontSize = Math.floor(maxFont*.5) + "px";
-			var txt = (score == "NA")? "NA" : Math.floor(100*score) + "%";
-			div.innerHTML = "<p style='margin-top:0; margin-bottom:0'>" + txt + "</p>"
-			var clear = document.createElement('p');
-			clear.style.marginTop = 0;
-			clear.style.fontSize = Math.floor(maxFont/4) + "px";
-			clear.innerHTML = "clear";
-			clear.onclick = function() {
-				var yes = confirm("Clear Data for " + hiragana[i] + "?");
-				if (yes) {
-					localStorage.removeItem(r);
-					localStorage.removeItem(t);
-				}
-			};
-			div.appendChild(clear);
-		}
-	
-		function showCharacter(cell) {
-			var div = cell.myDiv;
-			var i = cell.index;
-			var r = hiragana[i] + "r";
-			var t = hiragana[i] + "t";
-			var score = (localStorage[t] > 0)? (localStorage[r]/localStorage[t]): "NA";
-			div.style.fontSize = ((score == "NA")? maxFont : Math.floor((1-(score*.5))*maxFont)) + "px";
-			div.innerHTML = hiragana[i];
-		}
+	var clear = document.createElement('td');
+	clear.innerHTML = "clear";
+	clear.onclick = function() {clearcell(this);};
+
+	row.appendChild(left);
+	row.appendChild(middle);
+	row.appendChild(right);
+	row.appendChild(clear);
+	listtable.appendChild(row);
+}
+}
+
+function toggle(m) {
+	var row = m.parentNode;
+	row.on = !row.on;
+	if (row.on) {
+		m.innerHTML = "On";
+		row.style.color = "rgba(255,255,255,1)";
+	} else {
+		m.innerHTML = "Off";
+		row.style.color = "rgba(255,255,255,0.5)";
+	}
+}
+
+function clearcell(m) {
+	var row = m.parentNode;
+	var i = row.index;
+	var r = hiragana[i] + "r";
+	var t = hiragana[i] + "t";
+	var yes = confirm("Clear Data for " + hiragana[i] + "?");
+	if (yes) {
+		localStorage.removeItem(r);
+		localStorage.removeItem(t);
+	}
+}
