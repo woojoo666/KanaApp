@@ -1,0 +1,112 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<style>
+		div{overflow: hidden; text-align: center; whitespace: nowrap;}
+	</style>
+</head>
+<body onload="initTable();">
+<a href="final styled.html">Back</a>
+<div id="containr" style="border: 3px solid; overflow:scroll;">
+	<table id="results"></table>
+</div>
+
+<script>
+
+	results = document.getElementById("results");
+
+	var containr = document.getElementById("containr");
+
+	var cols;
+
+	var hiragana = [
+	"あ","い","う","え","お",
+	"か","き","く","け","こ",
+	"さ","し","す","せ","そ",
+	"た","ち","つ","て","と",
+	"な","に","ぬ","ね","の",
+	"は","ひ","ふ","へ","ほ",
+	"ま","み","む","め","も",
+	"や","ゆ","よ",
+	"ら","り","る","れ","ろ",
+	"わ","を",
+	"ん"];
+
+	var cellWidth = 50;
+	maxFont = 60;
+	var cellspace = 20;
+
+	window.addEventListener('resize', resizeTable, false);	
+
+	function resizeTable() {
+		containr.removeChild(results);
+		results = document.createElement('table');
+		containr.appendChild(results);
+		initTable();
+	}
+		
+
+	function initTable() {
+		results.cellpadding = results.border = "0";
+		results.cellSpacing = cellspace;
+
+		//note: final cell width is cellWidth+2 for some reason
+		cols = Math.floor((containr.clientWidth - cellspace)/(cellWidth+2+cellspace));
+
+		var row = document.createElement("tr");
+		for(var i = 0; i < hiragana.length; i++) {
+			var r = hiragana[i] + "r";
+			var t = hiragana[i] + "t";
+//			localStorage[r] = 1;
+//			localStorage[t] = 3;
+	
+			var cell = document.createElement("td");
+			cell.style.width = cellWidth + "px";
+			cell.style.height = cellWidth + "px";
+			row.appendChild(cell);
+			
+			var div = document.createElement("div");
+			div.style.width = cellWidth + "px";
+			div.style.height = cellWidth + "px";
+			div.style.overflow = "hidden";
+			div.innerHTML = hiragana[i];
+			cell.appendChild(div);
+
+			cell.myDiv = div;//WHOA WHATS HAPPENING, new property?
+			cell.index = i;
+
+			cell.onclick = function() {reveal(this);};
+
+			if (localStorage[t] > 0) {
+				var score = 1-(localStorage[r]*.5/localStorage[t]); //the smaller the better!
+				div.style.fontSize = Math.floor(score*maxFont) + "px";
+			} else {
+				div.style.fontSize = maxFont + "px";
+			}
+
+
+			if(i%cols == cols-1 || i == hiragana.length - 1) {
+				results.appendChild(row);
+				row = document.createElement("tr");
+			}
+		}
+	}
+	
+	function reveal(cell) {
+		var div = cell.myDiv;
+		var i = cell.index;
+		var r = hiragana[i] + "r";
+		var t = hiragana[i] + "t";
+		var score = (localStorage[t] > 0)? (localStorage[r]/localStorage[t]): "NA";
+		if (div.innerHTML == hiragana[i]) {
+			div.style.fontSize = Math.floor(maxFont*.5) + "px";
+			div.innerHTML = (score == "NA")? "NA" : Math.floor(100*score) + "%";
+		} else {
+			div.style.fontSize = ((score == "NA")? maxFont : Math.floor((1-(score*.5))*maxFont)) + "px";
+			div.innerHTML = hiragana[i];
+		}
+	}
+</script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+</head>
+<body>
+<div id="containr" style="height:100px; border: 3px solid; overflow:scroll;">
+	<table id="results"></table>
+</div>
+
+<script>
+
+results = document.getElementById("results");
+
+var containr = document.getElementById("containr");
+
+var hiragana = [
+	"あ","い","う","え","お",
+	"か","き","く","け","こ",
+	"さ","し","す","せ","そ",
+	"た","ち","つ","て","と",
+	"な","に","ぬ","ね","の",
+	"は","ひ","ふ","へ","ほ",
+	"ま","み","む","め","も",
+	"や","ゆ","よ",
+	"ら","り","る","れ","ろ",
+	"わ","を",
+	"ん"];
+
+	var cellWidth = 20;
+	containr.style.width = (100 + Math.floor(100*Math.random())) + "px";
+
+
+  	var inner = document.createElement('p');
+  	inner.style.width = "100%";
+  	inner.style.height = "200px";
+	containr.appendChild(inner);
+
+	var cols = Math.floor((parseInt(containr.clientWidth) - 3)/cellWidth);
+	
+	containr.removeChild(inner);
+
+	var row = document.createElement("tr");
+	for(var i = 0; i < hiragana.length; i++) {
+		var r = hiragana[i] + "r";
+		var t = hiragana[i] + "t";
+		localStorage[r] = localStorage[t] = 0;
+
+/*		if (i%cols == 0) {
+			if (row != null) {
+				results.appendChild(row);
+			}
+			row = document.createElement("tr");
+		}*/
+		var cell = document.createElement("td");
+		cell.style.width = cellWidth + "px";
+		cell.style.textAlign = "center";
+		cell.style.textBaseline = "middle";
+		cell.innerHTML = hiragana[i];
+		row.appendChild(cell);
+
+//		alert("checkpoint");
+
+		if(i%cols == cols-1 || i == hiragana.length) {
+			results.appendChild(row);
+			row = document.createElement("tr");
+		}
+	}
+
+/*	if (hiragana%cols != 0) {
+		results.appendChild(row);
+	}*/
+
+/*	var counter = 0;
+	for(var i = 0; i < 10; i++) {
+		var row = document.createElement("tr");
+		for(var j = 0; j < 10; j++) {
+			var cell= document.createElement("td");
+			cell.innerHTML = counter;
+			row.appendChild(cell);
+			counter++;
+		}
+		results.appendChild(row);
+	}*/
+
+</script>
+</body>
+</html>

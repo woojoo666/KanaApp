@@ -1,0 +1,125 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<style>
+		td{overflow: hidden; text-align: center; valign: middle; whitespace: nowrap;}
+		table{width: 0px; height: 0px; overflow:hidden; white-space: nowrap;}
+	</style>
+</head>
+<body onload="init();">
+<div id="containr" style="height:100px; border: 3px solid; overflow:scroll;">
+	<table id="results" style="table-layout:fixed;"></table>
+</div>
+
+<script>
+
+	results = document.getElementById("results");
+
+	var containr = document.getElementById("containr");
+
+	var cols;
+
+	var hiragana = [
+	"あ","い","う","え","お",
+	"か","き","く","け","こ",
+	"さ","し","す","せ","そ",
+	"た","ち","つ","て","と",
+	"な","に","ぬ","ね","の",
+	"は","ひ","ふ","へ","ほ",
+	"ま","み","む","め","も",
+	"や","ゆ","よ",
+	"ら","り","る","れ","ろ",
+	"わ","を",
+	"ん"];
+
+	var cellWidth = 50;
+	maxFont = 60;
+//	containr.style.width = (100 + Math.floor(100*Math.random())) + "px";
+
+//	window.addEventListener('resize', resizeTable, false);	
+
+	function init() {
+		alert(parseInt(containr.clientWidth));
+		calcCols();
+		initTable();
+	}
+
+	function resizeTable() {
+		containr.removeChild(results);
+		results = document.createElement('table');
+		containr.appendChild(results);
+
+		init();
+	}
+
+	function calcCols() {
+
+//		alert(parseInt(containr.clientWidth));
+
+  		var inner = document.createElement('p');
+  		inner.style.width = "100%";
+  		inner.style.height = "200px";
+		containr.appendChild(inner);
+
+//		alert(parseInt(containr.clientWidth));
+
+		cols = Math.floor((parseInt(containr.clientWidth) - 3)/(cellWidth+2));
+	
+		containr.removeChild(inner);
+	}
+
+	function initTable() {
+		var row = document.createElement("tr");
+		for(var i = 0; i < hiragana.length; i++) {
+			var r = hiragana[i] + "r";
+			var t = hiragana[i] + "t";
+			localStorage[r] = 1;
+			localStorage[t] = 3;
+	
+			var cell = document.createElement("td");
+			cell.style.width = cellWidth + "px";
+			cell.style.height = cellWidth + "px";
+			cell.innerHTML = hiragana[i];
+			cell.index = i; //WHOA WHATS HAPPENING, new property?
+			cell.onclick = function() {reveal(this);};
+			row.appendChild(cell);
+
+			if (localStorage[t] > 0) {
+				var score = 1-(localStorage[r]*.5/localStorage[t]); //the smaller the better!
+				cell.style.fontSize = Math.floor(score*maxFont) + "px";
+			} else {
+				cell.style.fontSize = maxFont + "px";
+			}
+
+
+			if(i%cols == cols-1 || i == hiragana.length - 1) {
+				results.appendChild(row);
+				row = document.createElement("tr");
+			}
+		}
+
+//		results.style.tableLayout = "fixed";
+	}
+	
+	function reveal(cell) {
+		var i = cell.index;
+		var r = hiragana[i] + "r";
+		var t = hiragana[i] + "t";
+		var score = (localStorage[t] > 0)? (localStorage[r]/localStorage[t]): "NA";
+		if (cell.innerHTML == hiragana[i]) {
+			cell.style.fontSize = Math.floor(maxFont*.5) + "px";
+			cell.innerHTML = (score == "NA")? "NA" : Math.floor(100*score) + "%";
+		} else {
+			cell.style.fontSize = ((score == "NA")? maxFont : Math.floor((1-(score*.5))*maxFont)) + "px";
+			cell.innerHTML = hiragana[i];
+		}
+
+		cell.style.overflow = "hidden";
+		cell.style.width = cellWidth + "px";
+		alert(cols*cell.clientWidth);
+		alert(containr.clientWidth);
+	}
+</script>
+</body>
+</html>

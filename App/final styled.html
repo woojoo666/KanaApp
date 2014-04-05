@@ -1,0 +1,50 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+		<meta charset="utf-8">
+		<style>
+			@font-face {
+				font-family: Kozuko;
+				src: url(KFhimaji.otf);
+			}
+	
+			body{
+				margin: 20px;
+				font-family: Kozuko;
+			}
+
+			textArea{width: 100%; border: 3px solid #999;font-family: Kozuko;}
+			audio{width: 100%;}
+			#selector{color:#999;}
+			
+			.boxsizingBorder {
+    				-webkit-box-sizing: border-box;
+				-moz-box-sizing: border-box;
+				box-sizing: border-box;
+			}
+			
+			.right {
+				float:right
+			}
+		</style>
+</head>
+<body onload="init();">
+	<p style="text-align: center; font-size: 30px; color: #999">ひらがな Strokes</p>
+	<audio id ="player" controls="controls">Your browser does not support audio tag</audio>
+	<br>
+	<textArea id="output" rows="1" cols="80" class="boxsizingBorder">Output</textArea>
+	<div>
+		<span onclick="next();">Next</span>
+		<a href="resultsdiv.html">Results</a>
+		<span class="right">
+			<select id="selector" style="font-family: Kozuko"></select>
+			<span onclick="go()">Go</span>
+		</span>
+	</div>
+	<br>
+	<div id="canvasDiv">
+		<canvas id="canvas" height="300"></canvas>
+	</div>
+	<script src="final styled.js"></script>
+</body>
+</html>
