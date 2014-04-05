@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+		<meta charset="utf-8">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+		<style>
+			@font-face {
+				font-family: Kozuko;
+				src: url(KozMinPro-Heavy.otf);
+			}
+	
+		    body{font-family: Kozuko;}
+			canvas{border: 3px solid;}
+			textArea{}
+	
+		</style>		
+</head>
+<body onload="init()">
+	<p>ひらがな Strokes</p>
+	<br>
+	<textArea id="output" rows="1">Output</textArea>
+	<button onclick="next();">Next</button>
+	<br>
+	<canvas id="canvas" width="300" height="300""></canvas>
+
+	<script src="strokes.js"></script>
+</body>
+</html>
