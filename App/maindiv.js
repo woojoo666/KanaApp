@@ -1,6 +1,7 @@
 function $(id) {return document.getElementById(id);}
 
 var canvas = $('canvas');
+var canvasDiv = $('canvasDiv');
 var ctx;
 
 var prevX;
@@ -66,7 +67,7 @@ var paths = [
 	'0v3v7o4',
 	'2 0v3v7o2o4',
 	'0 3v7o2 4o0',
-	'3v7o2o7',
+	'3v7o2o7'
 	];
 
 var current; //which character your on
@@ -78,7 +79,6 @@ var progress; //which checkpoint you just got to
 var currentStroke; //which stroke your on
 var correct; //if your character is currently correct
 
-var output = $('output');
 var player = $('player');
 
 var selector = $('selector');
@@ -95,7 +95,7 @@ for(var i=0;i<a.length;i++) {
     }
 }
 
-function init() {
+function initTest() {
     ctx = canvas.getContext('2d');
 
     window.addEventListener('resize', initCanvas, false);
@@ -111,11 +111,10 @@ function init() {
 		if (localStorage[t] >= minData) {
 			selector.innerHTML += "<option id='result"+i+"' value='"+i+"'>" + 
 				hiragana[i] + ": " + Math.floor(localStorage[r]*100/localStorage[t]) + "%" + "</option>";
-			selector.innerHTML
 		} else {
 			localStorage[r] = localStorage[t] = 0;
 			selector.innerHTML += "<option id='result"+i+"' value='"+i+"'>" + 
-				hiragana[i] + " Insufficient Data Points" + "</option>";
+				hiragana[i] + " N/A" + "</option>";
 		}
 
 	}
@@ -123,10 +122,6 @@ function init() {
 	player.volume = 0.5;
 
 	initCanvas();
-
-	$('cover').onclick = function() {fadeout();};
-	$('loading').innerHTML = "Click to Continue";
-	
 	
 //touchscreen
    canvas.addEventListener("touchstart",touchstartHandler,false);
@@ -135,22 +130,24 @@ function init() {
    canvas.addEventListener("touchcancel", touchcancelHandler,false);
    
    document.addEventListener('touchmove', preventScrollingHandler, false);
-
+   
+   player.addEventListener('playing',playbutton,false);
+   player.addEventListener('ended',playbutton,false);
 }
 
 function preventScrollingHandler(event) {
     event.preventDefault();
 }
 
-function fadeout() {
-	var cover = $("cover");
-	cover.style.opacity = "0";
-	cover.style.pointerEvents = "none";
+function play() {player.load(); player.play();}
+
+function playbutton() {
+	$('playbutton').src = (player.paused)? 'Images/Playbutton On.png' : 'Images/Playbutton Off.png';
 }
 
 function initCanvas() {
-	var border = 3;
-	ctx.canvas.width = $('canvasDiv').scrollWidth - border*2;
+	var border = 0;
+	ctx.canvas.width = canvasDiv.scrollWidth - border*2;
 	ctx.canvas.style.border = border + "px solid white";
 
     ctx.strokeStyle = "red";
@@ -177,13 +174,13 @@ function next() {
 }
 
 function go() {
+	window.pageXOffset = 0;
 	current = selector.value;
 	initChar();
 }
 
 function initChar() {
 	ctx.clearRect(0,0,canvas.width,canvas.height);
-	output.innerHTML += "\n" + hiragana[current] + ": ";
 
 	path = paths[current].split(" ");
 	currentStroke = 0;
@@ -201,23 +198,22 @@ function touchstartHandler(e){
 			next();
 		} else {
 		multitouch = false;
-		var x = e.pageX - canvas.offsetLeft;
-		var y = e.pageY - canvas.offsetTop;
+		var x = e.pageX - canvasDiv.offsetLeft;
+		var y = e.pageY - canvasDiv.offsetTop;
 		ctx.beginPath();		
 		ctx.moveTo(x,y);
 		
 		prevX = x;
 		prevY = y;
-		started = true;
 		progress = -1;
 		}
 };
 
 function touchmoveHandler(e){
 	if(!multitouch) {
-		var x = e.pageX - canvas.offsetLeft;
-		var y = e.pageY - canvas.offsetTop;
-		ctx.lineTo(e.pageX - canvas.offsetLeft, e.pageY - canvas.offsetTop);
+		var x = e.pageX - canvasDiv.offsetLeft;
+		var y = e.pageY - canvasDiv.offsetTop;
+		ctx.lineTo(e.pageX - canvasDiv.offsetLeft, e.pageY - canvasDiv.offsetTop);
 		ctx.stroke();
 		
 		var changeX = x - prevX;
@@ -264,7 +260,6 @@ function checkpoint(card) {
 		if (card == checkpoint || card == (checkpoint-1)%8 || card == (checkpoint+1)%8) {
 			progress++;
 		}
-		output.innerHTML = progress;
 	}
 }
 

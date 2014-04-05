@@ -4,7 +4,6 @@
 		<meta charset="utf-8">
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=0.5, user-scalable=0"/>
-		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 		
 		<link rel="apple-touch-icon" sizes="57x57" href="icons/wu-57x57.png" />
 		<link rel="apple-touch-icon" sizes="72x72" href="icons/wu-72x72.png" />
@@ -12,16 +11,20 @@
 		<link rel="icon" type="image/png" href="icons/favicon.png" />
 		
 		<title>Hiragana Draw</title>
-		<style id="sty">
+		<style>
 			@font-face {
 				font-family: Kozuko;
 				src: url(KFhimaji.otf);
 			}
 	
 			body{
+				width: 640px;
+				height: 960px;
 				font-family: Kozuko;
 				overflow:hidden;
 			}
+
+			#selector{color:#999;}
 			
 			.right {
 				float:right
@@ -79,7 +82,7 @@
 				position: absolute;
 				left:0;
 				top:220px;
-				z-index:2;
+				z-index:1
 				
 				-webkit-opacity: 1;
   				-moz-opacity: 1;
@@ -92,39 +95,22 @@
   				transition: all 1s ease;
 			}
 			
-			#overlay{background: url('Images/Background Scroll - bordered.png'); z-index: 2; text-align:center; left:0; right:0; width:100%; height:100%}
-			#loading{margin-top:700px; z-index:1}
+			#overlay{z-index: 4}
 			#backbutton{width:100px; position:absolute; left:10px; top:10px; z-index:2; display:none}
 			
 			#containr{border: 3px solid white; overflow:scroll; height:700px;}
+			selector{font-family: Kozuko;}
+			canvas{background-color: rgba(255,255,255,0.5);}
 			
 			.back {position:absolute;left:1px;top:1px; z-index:1; font-size:60px}
 			.title {
-				font-size:140px; margin-top:0; position:absolute; top:-10px;
+				background: url('Images/Header.png');
+				font-size:140px; margin-top:0; position:absolute; top:-10px; z-index:0;
 			}
-			
-			.titlehead{
-				background: url('Images/Header2.png');
-				position:relative;
-				height: 168px;
-				width:640px;
-				left:-20px;
-				top:0;
-				z-index: 0;
-				overflow:hidden;
-			}
-			
-			#canvasDiv{position:relative;}
-			#playbutton{width: 75px; position:absolute; right: 40px; top: 20px; z-index:2}
-			#playbuttonbackground{position:absolute; left:292px;z-index:1}
-			#canvas{background-color: rgba(255,255,255,0.5); z-index:0}
-			#selector{font-size:40px; color:#999;}
 		</style>
 </head>
 <body onload="init();">
 	<div id="overlay" class="page">
-
-		<img id="loading" src="Images/Loading.png">
 	</div>
 	
 	<img id="maintitle" src="Images/Title Overlay.png">
@@ -140,33 +126,25 @@
 	<img id="backbutton" src="Images/Back Button.png" onclick="jumpTo('menupage');">
 	
 	<div id="testpage" class="page">
-		<div class="titlehead">
-			<p style="left:130px" class="title">Test!</p>	
-		</div>
-		<!-- <img id="playbutton" src='Images/Playbutton On.png' onclick="play();"> -->
-		<!-- <img id="playbuttonbackground" src='Images/Playbutton Back.png'> -->
-		<div style="position:relative;">
+		<p style="left:180px" class="title">Test!</p>
+		<div style="height:170px"></div>
+		<audio id ="player">Your browser does not support audio tag</audio>
+		<div>
+			<span onclick="play();">Play</span>
 			<span class="right">
 				<select id="selector" style="font-family: Kozuko"></select>
 				<span onclick="go()">Go</span>
 			</span>
 		</div>
 		<br>
-		<audio id ="player">Your browser does not support audio tag</audio>
 		<div id="canvasDiv">
-			<img id="playbutton" src='Images/Playbutton On.png' onclick="play();">
-			<img id="playbuttonbackground" src='Images/Playbutton Back.png'>
 			<canvas id="canvas" height="600"></canvas>
 		</div>
-
-		<br>
 	</div>
 	
 	<div id="resultspage" class="page">
-		<div class="titlehead">
-			<p style="left: 130px;" class="title">Results</p>
-		</div>
-		<div style="height:10px"></div>
+		<p style="left: 130px;" class="title">Results</p>
+		<div style="height:150px"></div>
 		<span onclick="showAllCharacters();">Characters /</span>
 		<span onclick="showAllPercents();">Percentages</span>
 		<div id="containr" onmouseover="document.body.style.overflow='hidden';" onmouseout="document.body.style.overflow='auto';">
@@ -175,46 +153,18 @@
 	</div>
 	
 	<div id='settingspage' class="page">
-		<div class="titlehead">
-			<p style="left: 90px;" class="title">Settings</p>
-		</div>
-		<div style="height:100px"></div>
+		<p style="left: 90px;" class="title">Settings</p>
+		<div style="height:200px"></div>
 		<input id="volumeslider" type="range" min="0" max="100" step="1" onchange="setVolume()">Volume</input>
 		<p onclick="clearAll()">Clear All Data</p>
 	</div>
 	
 	<script>
-	  	window.onorientationchange = function() {reorient();}
-	  	
-	  	//finds the center of a 90 degree rotation based on the current and projected coordinates of a point, and if the rotation is clockwise or not
-	  	function findCenter(curr, next, clockwise) {
-	  		midLenX = (next[0] - curr[0])/2;
-	  		midLenY = (next[1] - curr[1])/2;
-	  		centerX = curr[0] + midLenX + ((clockwise)? -midLenY : midLenY);
-	  		centerY = curr[1] + midLenY + ((clockwise)? midLenX : -midLenX);
-	  		return [centerX,centerY];
-	  	}
-	
-		function reorient() {
-			if (window.orientation %180 == 0) { //portrait mode, reset rotation
-				document.body.style.webkitTransform = "";
-			} else if (window.orientation == -90) { //clockwise rotation
-		    	var center = findCenter([0,0], [960,0], true);
-		    	document.body.style.webkitTransformOrigin = center[0] + "px " + (center[1]-10) + "px";
-		    	document.body.style.webkitTransform = 'rotate(90deg)';
-		    } else { //counterclockwise rotation
-		    	var center = findCenter([0,0], [0,640], false);
-		    	document.body.style.webkitTransformOrigin = (center[0]-30) + "px " + (center[1]-20) + "px";
-		    	document.body.style.webkitTransform = 'rotate(-90deg)';
-		    }
-	  	}
 	
 		function init() {
-			reorient();
 			initTest();
 			initTable();
 			$('overlay').onclick = function() {jumpTo('menupage'); startup()};
-			$('loading').src = "Images/Continue.png"
 			jumpTo('overlay');
 		}
 		

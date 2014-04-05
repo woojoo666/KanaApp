@@ -116,7 +116,7 @@
 			
 			#canvasDiv{position:relative;}
 			#playbutton{width: 75px; position:absolute; right: 40px; top: 20px; z-index:2}
-			#playbuttonbackground{position:absolute; left:292px;z-index:1}
+			#playbuttonbackground{position:absolute; left:292px; z-index:1; pointer-events:none}
 			#canvas{background-color: rgba(255,255,255,0.5); z-index:0}
 			#selector{font-size:40px; color:#999;}
 		</style>
@@ -143,8 +143,6 @@
 		<div class="titlehead">
 			<p style="left:130px" class="title">Test!</p>	
 		</div>
-		<!-- <img id="playbutton" src='Images/Playbutton On.png' onclick="play();"> -->
-		<!-- <img id="playbuttonbackground" src='Images/Playbutton Back.png'> -->
 		<div style="position:relative;">
 			<span class="right">
 				<select id="selector" style="font-family: Kozuko"></select>
@@ -169,7 +167,7 @@
 		<div style="height:10px"></div>
 		<span onclick="showAllCharacters();">Characters /</span>
 		<span onclick="showAllPercents();">Percentages</span>
-		<div id="containr" onmouseover="document.body.style.overflow='hidden';" onmouseout="document.body.style.overflow='auto';">
+		<div id="containr">
 			<table id="results"></table>
 		</div>
 	</div>

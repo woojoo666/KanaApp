@@ -4,7 +4,6 @@
 		<meta charset="utf-8">
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=0.5, user-scalable=0"/>
-		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 		
 		<link rel="apple-touch-icon" sizes="57x57" href="icons/wu-57x57.png" />
 		<link rel="apple-touch-icon" sizes="72x72" href="icons/wu-72x72.png" />
@@ -12,7 +11,7 @@
 		<link rel="icon" type="image/png" href="icons/favicon.png" />
 		
 		<title>Hiragana Draw</title>
-		<style id="sty">
+		<style>
 			@font-face {
 				font-family: Kozuko;
 				src: url(KFhimaji.otf);
@@ -184,33 +183,8 @@
 	</div>
 	
 	<script>
-	  	window.onorientationchange = function() {reorient();}
-	  	
-	  	//finds the center of a 90 degree rotation based on the current and projected coordinates of a point, and if the rotation is clockwise or not
-	  	function findCenter(curr, next, clockwise) {
-	  		midLenX = (next[0] - curr[0])/2;
-	  		midLenY = (next[1] - curr[1])/2;
-	  		centerX = curr[0] + midLenX + ((clockwise)? -midLenY : midLenY);
-	  		centerY = curr[1] + midLenY + ((clockwise)? midLenX : -midLenX);
-	  		return [centerX,centerY];
-	  	}
-	
-		function reorient() {
-			if (window.orientation %180 == 0) { //portrait mode, reset rotation
-				document.body.style.webkitTransform = "";
-			} else if (window.orientation == -90) { //clockwise rotation
-		    	var center = findCenter([0,0], [960,0], true);
-		    	document.body.style.webkitTransformOrigin = center[0] + "px " + (center[1]-10) + "px";
-		    	document.body.style.webkitTransform = 'rotate(90deg)';
-		    } else { //counterclockwise rotation
-		    	var center = findCenter([0,0], [0,640], false);
-		    	document.body.style.webkitTransformOrigin = (center[0]-30) + "px " + (center[1]-20) + "px";
-		    	document.body.style.webkitTransform = 'rotate(-90deg)';
-		    }
-	  	}
 	
 		function init() {
-			reorient();
 			initTest();
 			initTable();
 			$('overlay').onclick = function() {jumpTo('menupage'); startup()};

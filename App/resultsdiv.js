@@ -87,8 +87,6 @@
 					row = document.createElement("tr");
 				}
 			}
-			
-			$('resultsdiv').style.visibility = "none";
 		}
 		
 		function reveal(cell) {

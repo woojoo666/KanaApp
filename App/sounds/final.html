@@ -1,0 +1,165 @@
+<!DOCTYPE HTML>
+<html> <!-- lang="en" manifest="final.manifest"> -->
+<head>
+		<meta charset="utf-8">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=0.5, user-scalable=0"/>
+		
+		<link rel="apple-touch-icon" sizes="57x57" href="icons/wu-57x57.png" />
+		<link rel="apple-touch-icon" sizes="72x72" href="icons/wu-72x72.png" />
+		<link rel="apple-touch-icon" sizes="114x114" href="icons/wu-114x114.png" />
+		<link rel="icon" type="image/png" href="icons/favicon.png" />
+		
+		<title>Hiragana Draw</title>
+		<style>
+			@font-face {
+				font-family: Kozuko;
+				src: url(KFhimaji.otf);
+			}
+	
+			body{
+				width: 600px;
+				height: 920px;
+				font-family: Kozuko;
+			}
+
+			#selector{color:#999;}
+			
+			.right {
+				float:right
+			}
+
+			.fadeout {
+				background-image:url('cover.png');
+				width: 640px;
+				height: 960px;				
+				position: absolute;
+				left:0px;
+				top:0px;
+				z-index: 2;
+
+  				-webkit-opacity: 1;
+  				-moz-opacity: 1;
+  				opacity: 1;
+
+				-webkit-transition: all 1s ease;
+  				-moz-transition: all 1s ease;
+  				-ms-transition: all 1s ease;
+  				-o-transition: all 1s ease;
+  				transition: all 1s ease;
+			}
+			
+			.page{
+				width: 600px;
+				height: 920px;				
+				position: absolute;
+				left:20px;
+				top:0;
+				z-index: 1;
+			}
+
+			.back {
+				position:absolute;
+				left:0px;
+				top:0px;
+				z-index: -1;
+			}
+			
+			#menupage{
+				text-align:center;
+				font-size:90px;
+				color:white;
+			}
+			
+			#settingspage{
+				text-align:center;
+				font-size:60px;
+				color:white;
+			}
+			
+			#resultspage{
+				font-size:30px;
+				color:white;
+			}
+			
+			#testpage{
+				text-align:center;
+				font-size:40px;
+				color:white;
+			}
+			
+			#containr{border: 3px solid white; overflow:scroll; height:800px;}
+			selector{font-family: Kozuko;}
+			canvas{background-color: rgba(255,255,255,0.5);}
+
+			.back {position:absolute;left:1px;top:1px; z-index:1}
+		</style>
+</head>
+<body onload="init(); initTable(); jumpTo('menupage')">
+	<div id="cover" class="fadeout">
+		<p id="loading" style="text-align:center; font-size:50px; color:white; line-height:1300px;">Loading</p>
+	</div>
+	<img src="background.png" class="back">
+	
+	<div id="menupage" class="page">
+		<p>ひらがな Strokes</p>
+		<p onclick="jumpTo('testpage')">Start Test</p>
+		<p onclick="jumpTo('resultspage')">Results</p>
+		<p onclick="jumpTo('settingspage')">Settings</p>
+	</div>
+	
+	<div id="testpage" class="page">
+		<span onclick="jumpTo('menupage')" style="position:absolute; left:5px; top:5px">Back</span>	
+		<p style="font-size: 70px; margin-bottom:0;">Test!</p>
+		<audio id ="player">Your browser does not support audio tag</audio>
+		<div>
+			<span onclick="play();">Play</span>
+			<span class="right">
+				<select id="selector" style="font-family: Kozuko"></select>
+				<span onclick="go()">Go</span>
+			</span>
+		</div>
+		<br>
+		<div id="canvasDiv">
+			<canvas id="canvas" height="600"></canvas>
+		</div>
+	</div>
+	
+	<div id="resultspage" class="page">
+		<p style="font-size:90px; margin-top:0">Results</p>
+		<span onclick="jumpTo('menupage')">Back</span>
+		<span class="right">
+			<span onclick="showAllCharacters();">Characters /</span>
+			<span onclick="showAllPercents();">Percentages</span>
+		</span>
+		<div id="containr" onmouseover="document.body.style.overflow='hidden';" onmouseout="document.body.style.overflow='auto';">
+			<table id="results"></table>
+		</div>
+	</div>
+	
+	<div id='settingspage' class="page">
+		<p style="font-size:140px; margin-top:0; position:absolute; left: 50px; top:-30px; z-index:0">Settings</p>
+		<input id="volumeslider" type="range" min="0" max="100" step="1" onchange="setVolume()" style="margin-top:200px;">Volume</input>
+		<p onclick="clearAll()">Clear All Data</p>
+		<div onclick="jumpTo('menupage')" class="back"><</div>
+	</div>
+	
+	<script>
+		function jumpTo(page) {
+			var pages = document.body.childNodes;
+			for(var i = 0; i < pages.length; i++) {
+				if(pages[i].className == "page") {
+					pages[i].style.display = "none";
+				}
+			}
+			document.getElementById(page).style.display = "block";
+		}
+		
+		function setVolume() {
+			document.getElementById('player').volume = document.getElementById('volumeslider').value/100;
+		}
+	</script>
+	<script src="maindiv.js"></script>
+	<script src="resultsdiv.js"></script>
+</body>
+</html>
