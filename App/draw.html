@@ -19,14 +19,33 @@
 		<link rel="apple-touch-startup-image" href="starts/iphone-retina.jpg" media="screen and (max-device-width: 640px)" />
 			-->
 		<link rel="icon" type="image/png" href="icons/favicon.png" />
+		
+		<style>
+	        @font-face {
+	          font-family: Kozuko;
+	          src: url(KozMinPro-Heavy.otf);
+	        }
+	         
+/*	        body {
+	          background: #333333;
+	          font-family: EraserDust;
+	          font-size: 24pt;
+	          color: #ffffff;
+	        }*/
+	        
+	        body{
+	        	font-family: Kozuko;
+	        }
+	    </style>
 
 	</head>
-	<body>
+	<body onload="init()">
 		<header>Drawing Pad</header>
 		<p id="notifications">Notifications</p>
 		<p> japanese: ひらがな </p>
 		<button id="canvasbtn" onclick="switchCanvas()">Layer 1 (click to change layer)</button>
 		<button id="intersect" onclick="intersection()">Intersection</button>
+		<button id="start" onclick="init()">Start</button>
 		
 		<div id="canvasDiv" style="position: relative;">
 			<canvas id="canvas1" width="300" height="300" style="position: absolute; left: 0; top: 0; z-index: 0; opacity:0.5;"></canvas>

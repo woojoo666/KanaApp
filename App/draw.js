@@ -1,5 +1,5 @@
 // When the DOM is ready
-document.addEventListener("DOMContentLoaded", init, false);
+//document.addEventListener("DOMContentLoaded", init, false);
 
 var notifs = document.getElementById("notifications");
 
@@ -25,18 +25,24 @@ function init()
     ctx1.lineWidth   = 10;
     ctx1.lineCap     = 'round';
     ctx1.fillStyle = "rgba(255,0,0,1)";
-    
+      
     ctx2             = canvas2.getContext('2d');
     ctx2.strokeStyle = "rgba(0,255,0,1)";
     ctx2.lineWidth   = 10;
     ctx2.lineCap     = 'round';
+    ctx2.font = '200px Kozuko';
+    ctx2.textAlign = 'center';
+    ctx2.textBaseline = 'middle';
+    ctx2.fillStyle = 'blue';
+    ctx2.fillText('な', canvas2.width/2, canvas2.height/2);
+    
 	ctx = ctx1;
-	
+    
 	notifs.innerHTML = "initialized";
 
    document.addEventListener("touchstart",touchstartHandler,false);
-document.addEventListener("touchmove", touchmoveHandler,false);
-document.addEventListener("touchcancel", touchcancelHandler,false);
+   document.addEventListener("touchmove", touchmoveHandler,false);
+   document.addEventListener("touchcancel", touchcancelHandler,false);
 
 //	var width1 = canvas1.width;
 	
