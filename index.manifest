@@ -3,7 +3,7 @@ CACHE MANIFEST
 # Version: 1.00
 
 CACHE:
-final.html
+index.html
 maindiv.js
 resultsdiv.js
 icons/favicon.png
