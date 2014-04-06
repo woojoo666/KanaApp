@@ -10,7 +10,9 @@ In the main menu, click "Start Menu" to go to the testing page. Here, you listen
 Results Page
 --------------
 In the main menu, click "Results" to see your progress. There are two views, "Characters" and "Percentages" (which can be chosen from the options at the top of the Results page).
+
 **Characters:** The smaller the hiragana, the higher your ratio of correct attempts to total attempts.
+
 **Percentages:** Displays the numerical percentage of correct/total attempts, and buttons to reset statistics for individual hiragana.
 
 Settings page
