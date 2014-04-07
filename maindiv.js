@@ -9,8 +9,6 @@ var player = $('player');
 var ctx = canvas.getContext('2d');
 var canvasBorder = 0;
 
-var minData = 3; //minimum data points for displaying score in resultpage
-
 var hiragana = [
     'あ', 'い', 'う', 'え', 'お',
     'か', 'き', 'く', 'け', 'こ',
@@ -48,7 +46,7 @@ function initTest() {
 
     initCanvas();
     initStorage();
-
+    
     ctx.font = '30px Kozuko';
     ctx.fillText('Two-finger-tap to start.', canvas.width / 2, canvas.height / 2 - 110);
     ctx.fillText('Listen for audio cue, and write', canvas.width / 2, canvas.height / 2 - 80);

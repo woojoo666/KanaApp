@@ -218,7 +218,10 @@
     </div>
 
     <script>
-    
+    function $(id) {
+        return document.getElementById(id);
+    }
+
     window.onorientationchange = function() {
         reorient();
     }

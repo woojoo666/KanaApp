@@ -1,9 +1,4 @@
-        function $(id) {
-            return document.getElementById(id);
-        }
-
         var results = $("results");
-
         var containr = $("containr");
 
         var cols;
@@ -12,16 +7,21 @@
         var maxFont = 85;
         var cellspace = 20;
 
-        window.addEventListener('resize', resizeTable, false);
+
+        var minData = 3; //minimum data points for displaying score in resultpage
 
         var prevY;
 
+        window.addEventListener('resize', resizeTable, false);
+
+        /* ISN'T DOING ANYTHING...
         containr.ontouchstart = function(event) {
-            prevY = event.pageY;
+            prevY = event.touches[0].pageY;
         };
 
         containr.ontouchmove = function(event) {
-            var nextTop = containr.scrollTop + (prevY - event.pageY);
+            e.preventDefault();
+            var nextTop = containr.scrollTop + (prevY - event.touches[0].pageY);
             if (nextTop < 0) {
                 containr.scrollTop = 0;
             } else if (nextTop > containr.scrollHeight - containr.clientHeight) {
@@ -29,8 +29,8 @@
             } else {
                 containr.scrollTop = nextTop;
             }
-            prevY = event.pageY;
-        };
+            prevY = event.touches[0].pageY;
+        };*/
 
         function resizeTable() {
             containr.removeChild(results);
@@ -124,7 +124,7 @@
 
                 var r = hiragana[i] + "r";
                 var t = hiragana[i] + "t";
-                var score = (localStorage[t] > 0) ? localStorage[r] / localStorage[t] : "NA";
+                var score = (localStorage[t]) ? localStorage[r] / localStorage[t] : "NA";
 
                 var row = document.createElement('tr');
                 row.on = true;
@@ -138,8 +138,8 @@
                 var textspace = document.createElement('span');
                 textspace.style.float = "left";
                 textspace.style.textAlign = "right";
-                textspace.innerHTML = (localStorage[t] > 0) ? Math.floor(score * 100) + "%" : "NA";
-                textspace.style.width = (localStorage[t] > 0) ? Math.floor(score * (maxwidth - minwidth) + minwidth) + "px" : minwidth + "px";
+                textspace.innerHTML = (localStorage[t]) ? Math.floor(score * 100) + "%" : "NA";
+                textspace.style.width = (localStorage[t]) ? Math.floor(score * (maxwidth - minwidth) + minwidth) + "px" : minwidth + "px";
                 middle.appendChild(textspace);
 
                 var right = document.createElement('td');
