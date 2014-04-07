@@ -46,15 +46,15 @@ function initTest() {
 
     initCanvas();
     initStorage();
-    
+
     ctx.font = '30px Kozuko';
-    ctx.fillText('Two-finger-tap to start.', canvas.width / 2, canvas.height / 2 - 110);
-    ctx.fillText('Listen for audio cue, and write', canvas.width / 2, canvas.height / 2 - 80);
-    ctx.fillText('the corresponding hiragana', canvas.width / 2, canvas.height / 2 - 50);
-    ctx.fillText('(with correct stroke order!!)', canvas.width / 2, canvas.height / 2 - 20);
-    ctx.fillText('Write your guess, then two-finger-tap', canvas.width / 2, canvas.height / 2 + 30);
-    ctx.fillText(' to check your answer. Two-finger-tap', canvas.width / 2, canvas.height / 2 + 60);
-    ctx.fillText('again to move onto next letter', canvas.width / 2, canvas.height / 2 + 90);
+    ctx.fillText('Listen for audio cue, and write', canvas.width / 2, canvas.height / 2 - 130);
+    ctx.fillText('the corresponding hiragana', canvas.width / 2, canvas.height / 2 - 100);
+    ctx.fillText('(with correct stroke order!!)', canvas.width / 2, canvas.height / 2 - 70);
+    ctx.fillText('Write your guess, then 2-finger-tap', canvas.width / 2, canvas.height / 2 - 20);
+    ctx.fillText('to check your answer. 2-finger-tap', canvas.width / 2, canvas.height / 2 + 10);
+    ctx.fillText('again to move onto next letter', canvas.width / 2, canvas.height / 2 + 40);
+    ctx.fillText('Two-finger-tap to start', canvas.width / 2, canvas.height / 2 + 170);
     ctx.font = '500px Kozuko';
 }
 

@@ -4,7 +4,7 @@ window.addEventListener('resize', resizeCanvas, false);
 (function addPlayerHandlers() {
     player.addEventListener('playing', refreshPlaybutton, false);
     player.addEventListener('ended', refreshPlaybutton, false);
-    player.addEventListener('click', play, false);
+    $('playbutton').addEventListener('click', play, false);
 
     function play() {
         player.load();
@@ -58,7 +58,7 @@ window.addEventListener('resize', resizeCanvas, false);
             var changeX = x - prevX;
             var changeY = y - prevY;
             var d = Math.sqrt(changeX * changeX + changeY * changeY);
-            
+
             if (d > sensitivity) {
                 OCR.partialStroke(changeX, changeY);
 
