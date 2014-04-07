@@ -139,10 +139,6 @@
         background-color: rgba(255, 255, 255, 0.5);
         z-index:0;
     }
-    #selector {
-        font-size:40px;
-        color:#999;
-    }
     #listtable {
         font-size:40px;
     }
@@ -185,20 +181,13 @@
 
     <img id="backbutton" src="Images/Back Button.png" onclick="jumpTo('menupage');">
 
-    <div id="testpage" class="page">
+    <div id="testpage" class="page" style="display:none;">
         <div class="titlehead">
             <p style="left:130px" class="title">Test!</p>
         </div>
-        <div style="position:relative;">
-            <span class="right">
-                <select id="selector" style="font-family: Kozuko"></select>
-                <span onclick="go()">Go</span>
-            </span>
-        </div>
-        <br>
         <audio id="player">Your browser does not support audio tag</audio>
         <div id="canvasDiv">
-            <img id="playbutton" src='Images/Playbutton On.png' onclick="play();">
+            <img id="playbutton" src='Images/Playbutton On.png'>
             <img id="playbuttonbackground" src='Images/Playbutton Back.png'>
             <canvas id="canvas" height="600"></canvas>
         </div>
@@ -206,7 +195,7 @@
         <br>
     </div>
 
-    <div id="resultspage" class="page">
+    <div id="resultspage" class="page" style="display:none;">
         <div class="titlehead">
             <p style="left: 130px;" class="title">Results</p>
         </div>
@@ -219,7 +208,7 @@
         </div>
     </div>
 
-    <div id='settingspage' class="page">
+    <div id='settingspage' class="page" style="display:none;">
         <div class="titlehead">
             <p style="left: 90px;" class="title">Settings</p>
         </div>
@@ -229,6 +218,7 @@
     </div>
 
     <script>
+    
     window.onorientationchange = function() {
         reorient();
     }
@@ -267,12 +257,14 @@
     }
 
     function init() {
+        document.getElementById('player').volume = 0.5;
+
         jumpTo('non-mobile');
-        if (!window.mobilecheck())
-          return;
+        //if (!window.mobilecheck())
+        //return;
 
         jumpTo('menupage');
-        reorient();
+        //reorient();
         initTest();
         initTable();
         $('overlay').onclick = function() {
@@ -313,6 +305,8 @@
     }
     </script>
     <script src="maindiv.js"></script>
+    <script src="testpage_OCR.js"></script>
+    <script src="testpage_eventhandlers.js"></script>
     <script src="resultsdiv.js"></script>
 </body>
 

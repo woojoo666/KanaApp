@@ -4,11 +4,12 @@ function $(id) {
 
 var canvas = $('canvas');
 var canvasDiv = $('canvasDiv');
-var ctx;
+var player = $('player');
 
-var prevX;
-var prevY;
-var sensitivity = 10;
+var ctx = canvas.getContext('2d');
+var canvasBorder = 0;
+
+var minData = 3; //minimum data points for displaying score in resultpage
 
 var hiragana = [
     'あ', 'い', 'う', 'え', 'お',
@@ -29,94 +30,8 @@ var hiragana = [
     'ん'
 ];
 
-var paths = [
-    '0 2 3o0o3',
-    '2 1',
-    '1 0o3',
-    '1 0v3v7o2o0',
-    '0 2o0o3',
-    '0o3',
-    '0 0 1 3o7',
-    '3v1',
-    '2 0 2o3',
-    '0 3o0',
-    '0o3 1 1',
-    '0 0 1 3o7 1 1',
-    '3v1 1 1',
-    '2 0 2o3 1 1',
-    '0 3o0 1 1',
-    '0 1 3o7',
-    '2o7',
-    '0 2o6o2o3',
-    '0 2 2o0',
-    '0 3v4v3o0',
-    '0 1 3o7 1 1',
-    '2o7 1 1',
-    '0 2o6o2o3 1 1',
-    '0 2 2o0 1 1',
-    '0 3v4v3o0 1 1',
-    '0 3 0 3o0',
-    '0 3v7o4',
-    '0o4',
-    '0v3o0',
-    '2 3o0',
-    '0 3 0 3o0 1 1',
-    '0 3v7o4 1 1',
-    '0o4 1 1',
-    '0v3o0 1 1',
-    '2 3o0 1 1',
-    '0 3 1 2o0o1',
-    '2 0 3o0',
-    '2o1 3o0o4o1',
-    '2 0v3v7o4o1',
-    '2o0o3',
-    '2 0 2o0o1',
-    '0v3o0o6v1',
-    '1 3o1o5 3 1',
-    '7v1',
-    '2 0 0 2o4o1',
-    '2 0 2o0o1 1 1',
-    '0v3o0o6v1 1 1',
-    '1 3o1o5 3 1 1 1',
-    '7v1 1 1',
-    '2 0 0 2o4o1 1 1',
-    '2 0 2o0o1 4o0o4',
-    '0v3o0o6v1 4o0o4',
-    '1 3o1o5 3 1 4o0o4',
-    '7v1 4o0o4',
-    '2 0 0 2o4o1 4o0o4',
-    '0 0 2o4o1',
-    '0v3o7o1 2o3',
-    '0 2o6o2o0o6 1',
-    '2o1 3o0o3',
-    '0 0 2o0o5',
-    '0o7o2o5 2 1',
-    '2v6o2o5 2',
-    '0 2o4o1',
-    '1 2v7o2o4',
-    '2 2o3',
-    '0v3v7o4o1',
-    '2 0v3v7o2o7',
-    '0v3v7o4',
-    '2 0v3v7o2o4',
-    '0 3v7o2 4o0',
-    '3v7o2o7'
-];
-
-var current; //which character your on
-
+var current; //which character you're on
 var drawing; //whether we're on drawing or checking screen
-
-var path; //an array containing the checkpoints for the current character
-var progress; //which checkpoint you just got to
-var currentStroke; //which stroke your on
-var correct; //if your character is currently correct
-
-var player = $('player');
-
-var selector = $('selector');
-
-var minData = 3; //minimum data points
 
 var a = document.getElementsByTagName("a");
 for (var i = 0; i < a.length; i++) {
@@ -124,67 +39,29 @@ for (var i = 0; i < a.length; i++) {
         a[i].onclick = function() {
             window.location = this.getAttribute("href");
             return false;
-        }
+        };
     }
 }
 
 function initTest() {
-    ctx = canvas.getContext('2d');
-
-    window.addEventListener('resize', initCanvas, false);
-
-    current = 0;
-    initChar();
-
-    drawing = true;
-
-    for (var i = 0; i < hiragana.length; i++) {
-        var r = hiragana[i] + "r";
-        var t = hiragana[i] + "t";
-        if (localStorage[t] >= minData) {
-            selector.innerHTML += "<option id='result" + i + "' value='" + i + "'>" +
-                hiragana[i] + ": " + Math.floor(localStorage[r] * 100 / localStorage[t]) + "%" + "</option>";
-        } else {
-            localStorage[r] = localStorage[t] = 0;
-            selector.innerHTML += "<option id='result" + i + "' value='" + i + "'>" +
-                hiragana[i] + " N/A" + "</option>";
-        }
-
-    }
-
-    player.volume = 0.5;
+    drawing = false;
 
     initCanvas();
+    initStorage();
 
-    //touchscreen
-    canvas.addEventListener("touchstart", touchstartHandler, false);
-    canvas.addEventListener("touchmove", touchmoveHandler, false);
-    canvas.addEventListener("touchend", touchendHandler, false);
-    canvas.addEventListener("touchcancel", touchcancelHandler, false);
-
-    document.addEventListener('touchmove', preventScrollingHandler, false);
-
-    player.addEventListener('playing', playbutton, false);
-    player.addEventListener('ended', playbutton, false);
-}
-
-function preventScrollingHandler(event) {
-    event.preventDefault();
-}
-
-function play() {
-    player.load();
-    player.play();
-}
-
-function playbutton() {
-    $('playbutton').src = (player.paused) ? 'Images/Playbutton On.png' : 'Images/Playbutton Off.png';
+    ctx.font = '30px Kozuko';
+    ctx.fillText('Two-finger-tap to start.', canvas.width / 2, canvas.height / 2 - 110);
+    ctx.fillText('Listen for audio cue, and write', canvas.width / 2, canvas.height / 2 - 80);
+    ctx.fillText('the corresponding hiragana', canvas.width / 2, canvas.height / 2 - 50);
+    ctx.fillText('(with correct stroke order!!)', canvas.width / 2, canvas.height / 2 - 20);
+    ctx.fillText('Write your guess, then two-finger-tap', canvas.width / 2, canvas.height / 2 + 30);
+    ctx.fillText(' to check your answer. Two-finger-tap', canvas.width / 2, canvas.height / 2 + 60);
+    ctx.fillText('again to move onto next letter', canvas.width / 2, canvas.height / 2 + 90);
+    ctx.font = '500px Kozuko';
 }
 
 function initCanvas() {
-    var border = 0;
-    ctx.canvas.width = canvasDiv.scrollWidth - border * 2;
-    ctx.canvas.style.border = border + "px solid white";
+    resizeCanvas();
 
     ctx.strokeStyle = "red";
     ctx.lineWidth = 20;
@@ -198,119 +75,61 @@ function initCanvas() {
 
 }
 
-function next() {
-    if (drawing) {
-        ctx.fillText(hiragana[current], canvas.width / 2, canvas.height / 2);
-        check();
-    } else {
-        current = Math.floor(46 * Math.random());
-        initChar();
-        player.play();
+function resizeCanvas() {
+    ctx.canvas.width = canvasDiv.scrollWidth - canvasBorder * 2;
+    ctx.canvas.style.border = canvasBorder + "px solid white";
+}
+
+function initStorage() {
+    for (var i = 0; i < hiragana.length; i++) {
+        var r = hiragana[i] + "r";
+        var t = hiragana[i] + "t";
+        if (!localStorage[t]) { //if it doesn't exist
+            localStorage[r] = localStorage[t] = 0;
+        }
     }
 }
 
-function go() {
-    window.pageXOffset = 0;
-    current = selector.value;
-    initChar();
-}
-
-function initChar() {
+function newChar() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    path = paths[current].split(" ");
-    currentStroke = 0;
-    correct = true;
+    current = Math.floor(46 * Math.random());
+    OCR.initChar(current);
 
     player.src = "sounds/" + (current + 1) + ".mp3";
 
     drawing = true;
 }
 
-var multitouch = false;
-
-function touchstartHandler(e) {
-    if (e.touches.length > 1) {
-        multitouch = true;
-        next();
+function next() {
+    if (drawing) {
+        ctx.fillText(hiragana[current], canvas.width / 2, canvas.height / 2);
+        check();
     } else {
-        multitouch = false;
-        var x = e.pageX - canvasDiv.offsetLeft;
-        var y = e.pageY - canvasDiv.offsetTop;
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-
-        prevX = x;
-        prevY = y;
-        progress = -1;
-    }
-};
-
-function touchmoveHandler(e) {
-    if (!multitouch) {
-        var x = e.pageX - canvasDiv.offsetLeft;
-        var y = e.pageY - canvasDiv.offsetTop;
-        ctx.lineTo(e.pageX - canvasDiv.offsetLeft, e.pageY - canvasDiv.offsetTop);
-        ctx.stroke();
-
-        var changeX = x - prevX;
-        var changeY = y - prevY;
-        var d = Math.sqrt(changeX * changeX + changeY * changeY);
-        if (d > sensitivity) {
-            var cardinal = cardinalize(x - prevX, y - prevY);
-
-            prevX = x;
-            prevY = y;
-
-            ctx.beginPath();
-            ctx.strokeStyle = "red";
-            ctx.moveTo(x, y);
-
-            checkpoint(cardinal);
-        }
-    }
-};
-
-function touchendHandler() {
-    if (!multitouch) {
-        if (currentStroke < path.length && (2 * (progress + 1)) > path[currentStroke].length) {
-            //      alert("YAY");
-        } else {
-            correct = false;
-        }
-        currentStroke++;
-    }
-};
-
-function touchcancelHandler(event) {
-    alert('The application has paused, click to continue');
-}
-
-function cardinalize(x, y) {
-    var theta = (y > 0) ? Math.acos(x / Math.sqrt(x * x + y * y)) : 2 * Math.PI - Math.acos(x / Math.sqrt(x * x + y * y));
-    return (Math.round(theta * 4 / Math.PI)) % 8;
-}
-
-function checkpoint(card) {
-    if (currentStroke < path.length && (2 * (progress + 1)) < path[currentStroke].length) {
-        var checkpoint = parseInt(path[currentStroke].charAt(2 * (progress + 1)));
-        if (card == checkpoint || card == (checkpoint - 1) % 8 || card == (checkpoint + 1) % 8) {
-            progress++;
-        }
+        newChar();
+        player.play();
     }
 }
 
 function check() {
-    if (currentStroke == path.length && correct) { //RIGHT!
+    var correct = OCR.isCorrect();
+
+    var r = hiragana[current] + "r";
+    var t = hiragana[current] + "t";
+
+    localStorage[t]++;
+    if (correct)
+        localStorage[r]++;
+
+    //draw correct/wrong symbols
+    if (correct) {
         ctx.strokeStyle = "rgba(100,255,100,0.75)";
         ctx.beginPath();
         ctx.moveTo(canvas.width / 4, canvas.height / 2);
         ctx.lineTo(canvas.width / 2, 3 * canvas.height / 4);
         ctx.lineTo(5 * canvas.width / 6, canvas.height / 6);
         ctx.stroke();
-
-        sendScore(true);
-    } else { //WRONG
+    } else {
         ctx.strokeStyle = "red";
         ctx.beginPath();
         ctx.moveTo(0, 0);
@@ -318,23 +137,6 @@ function check() {
         ctx.moveTo(0, canvas.height);
         ctx.lineTo(canvas.width, 0);
         ctx.stroke();
-
-        sendScore(false);
     }
     drawing = false;
-}
-
-function sendScore(c) {
-    var r = hiragana[current] + "r";
-    var t = hiragana[current] + "t";
-
-    if (c) {
-        localStorage[r]++;
-    }
-    localStorage[t]++;
-
-    if (localStorage[t] >= minData) {
-        var id = "result" + current;
-        $(id).innerHTML = hiragana[current] + ": " + Math.floor(localStorage[r] * 100 / localStorage[t]) + "%";
-    }
 }
