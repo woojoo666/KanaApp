@@ -1,21 +1,5 @@
 window.addEventListener('resize', resizeCanvas, false);
 
-//all player handlers in a closure
-(function addPlayerHandlers() {
-    player.addEventListener('playing', refreshPlaybutton, false);
-    player.addEventListener('ended', refreshPlaybutton, false);
-    $('playbutton').addEventListener('click', play, false);
-
-    function play() {
-        player.load();
-        player.play();
-    }
-
-    function refreshPlaybutton() {
-        $('playbutton').src = (player.paused) ? 'Images/Playbutton On.png' : 'Images/Playbutton Off.png';
-    }
-})();
-
 //all touch handling in a closure
 (function addTouchHandlers() {
 

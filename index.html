@@ -19,12 +19,9 @@
         font-family: Kozuko;
         src: url(KFhimaji.otf);
     }
-    body {
+    html, body {
         font-family: Kozuko;
         overflow:hidden;
-    }
-    .right {
-        float:right
     }
     .page {
         background: url('Images/Background Scroll - bordered.png');
@@ -36,6 +33,7 @@
         top:0;
         margin-left: 20;
         z-index: 1;
+        overflow: hidden;
     }
     #menupage {
         text-align:center;
@@ -98,35 +96,50 @@
         overflow:scroll;
         height:700px;
     }
-    .back {
-        position:absolute;
-        left:1px;
-        top:1px;
-        z-index:1;
-        font-size:60px
+    #tableWrapper {
+        display: table;
+        width: 100%;
+        height: 100%;
+    }
+    #testpage-titleWrapper {
+        display: table-row;
+    }
+    .titleWrapper {
+        position: relative;
+        width: 100%;
+        height: 168px;
     }
     .title {
+        position:absolute;
         font-size:140px;
         margin-top:0;
-        position:absolute;
+        right: 20px;
         top:-10px;
     }
     .titlehead {
-        background: url('Images/Header2.png');
+        position: absolute;
         height: 168px;
-        width: 640px;
-        float: right;
+        width: 540px;
+        right: 0;
         overflow:hidden;
+        background: url('Images/Header2.png');
+    }
+    #canvasDivWrapper {
+        width: 100%;
+        height: 100%;
+        display: table-row;
     }
     #canvasDiv {
         position:relative;
+        width: 100%;
+        height: 100%;
     }
     #playbutton {
         position:absolute;
         width: 75px;
-        right: 40px;
         top: 20px;
-        z-index:2
+        right: 40px;
+        z-index:2;
     }
     #playbuttonbackground {
         position:absolute;
@@ -134,10 +147,13 @@
         z-index:1;
         pointer-events:none
     }
+    /*TODO: make canvas offset from its container, like margins*/
     #canvas {
         position:absolute;
-        background-color: rgba(255, 255, 255, 0.5);
         z-index:0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.5);
     }
     #listtable {
         font-size:40px;
@@ -150,9 +166,9 @@
         text-align:left;
     }
     .onoffbutton {
-        background: url('Images/onoffbutton.png');
         float: right;
         width: 20px;
+        background: url('Images/onoffbutton.png');
     }
     .menuOption {
         margin-top: 0px;
@@ -182,22 +198,28 @@
     <img id="backbutton" src="Images/Back Button.png" onclick="jumpTo('menupage');">
 
     <div id="testpage" class="page" style="display:none;">
-        <div class="titlehead">
-            <p style="left:130px" class="title">Test!</p>
+        <div id="tableWrapper">
+            <div class='titleWrapper' id='testpage-titleWrapper'>
+                <div class="titlehead">
+                    <p class="title">Test!</p>
+                </div>
+            </div>
+            <audio id="player">Your browser does not support audio tag</audio>
+            <div id='canvasDivWrapper'>
+                <div id="canvasDiv">
+                    <img id="playbutton" src='Images/Playbutton On.png'>
+                    <img id="playbuttonbackground" src='Images/Playbutton Back.png'>
+                    <canvas id="canvas"></canvas>
+                </div>
+            </div>
         </div>
-        <audio id="player">Your browser does not support audio tag</audio>
-        <div id="canvasDiv">
-            <img id="playbutton" src='Images/Playbutton On.png'>
-            <img id="playbuttonbackground" src='Images/Playbutton Back.png'>
-            <canvas id="canvas" height="600"></canvas>
-        </div>
-
-        <br>
     </div>
 
     <div id="resultspage" class="page" style="display:none;">
-        <div class="titlehead">
-            <p style="left: 130px;" class="title">Results</p>
+        <div class='titleWrapper'>
+            <div class="titlehead">
+                <p class="title">Results</p>
+            </div>
         </div>
         <div style="height:10px"></div>
         <span onclick="showAllCharacters();">Characters /</span>
@@ -209,8 +231,10 @@
     </div>
 
     <div id='settingspage' class="page" style="display:none;">
-        <div class="titlehead">
-            <p style="left: 90px;" class="title">Settings</p>
+        <div class='titleWrapper'>
+            <div class="titlehead">
+                <p style='right: -50px;' class="title">Settings</p>
+            </div>
         </div>
         <div style="height:100px"></div>
         <input id="volumeslider" type="range" min="0" max="100" step="1" onchange="setVolume()">Volume</input>
@@ -218,6 +242,8 @@
     </div>
 
     <script>
+    //TODO: reenable manifest
+
     function $(id) {
         return document.getElementById(id);
     }
@@ -259,7 +285,7 @@
         }
     }
 
-    function init() {
+    function init() { //TODO: reenable orientation and mobile check
         document.getElementById('player').volume = 0.5;
 
         jumpTo('non-mobile');
