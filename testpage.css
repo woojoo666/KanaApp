@@ -1,0 +1,23 @@
+#testpage {
+    font-size:60px;
+}
+#playbutton {
+    position:absolute;
+    width: 75px;
+    top: 20px;
+    right: 40px;
+    z-index:2;
+}
+#playbuttonbackground {
+    position:absolute;
+    right:0;
+    z-index:1;
+    pointer-events:none
+}
+#canvas {
+    position:absolute;
+    z-index:0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.5);
+}

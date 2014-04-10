@@ -5,7 +5,6 @@
 #containr {
     border: 3px solid white;
     overflow:scroll;
-    height:700px;
 }
 #percentsTable {
     font-size:40px;
@@ -23,10 +22,11 @@
 .textSpace {
     text-align:right;
 }
+/*TODO: make it only show up when you swipe right*/
 .onoffDiv {
     padding-left:50px;
     float: right;
-    width: 100px;
+    width: 200px;
 }
 /*TODO: make it background red, and only shows up when you swipe right*/
  .clearDiv {

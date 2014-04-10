@@ -143,7 +143,7 @@ function initPercentsTable() {
 
         var right = document.createElement('div');
         right.className = 'onoffDiv';
-        right.innerHTML = "on";
+        right.innerHTML = "disable";
         right.onclick = function() {
             toggle(this);
         };
@@ -167,10 +167,10 @@ function toggle(m) {
     var row = m.parentNode;
     row.on = !row.on;
     if (row.on) {
-        m.innerHTML = "on";
+        m.innerHTML = "disable";
         row.style.color = "rgba(255,255,255,1)";
     } else {
-        m.innerHTML = "off";
+        m.innerHTML = "enable";
         row.style.color = "rgba(255,255,255,0.5)";
     }
 }
