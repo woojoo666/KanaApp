@@ -1,5 +1,6 @@
-var results = $("results");
+var results = $("characterTable");
 var containr = $("containr");
+var percentsTable = document.getElementById('percentsTable');
 
 var cols;
 
@@ -36,10 +37,16 @@ function resizeTable() {
     containr.removeChild(results);
     results = document.createElement('table');
     containr.appendChild(results);
-    initTable();
+    initResults();
 }
 
-function initTable() {
+function initResults() {
+    initCharacterTable();
+    initPercentsTable();
+    showAllCharacters();
+}
+
+function initCharacterTable() {
     results.cellpadding = results.border = "0";
     results.cellSpacing = cellspace;
 
@@ -68,7 +75,7 @@ function initTable() {
         cell.appendChild(div);
 
         if (localStorage[t] > 0) {
-            var score = 1 - (localStorage[r] * .5 / localStorage[t]); //the smaller the better!
+            var score = 1 - (localStorage[r] * 0.5 / localStorage[t]); //the smaller the better!
             div.style.fontSize = Math.floor(score * maxFont) + "px";
         } else {
             div.style.fontSize = maxFont + "px";
@@ -80,9 +87,6 @@ function initTable() {
             row = document.createElement("tr");
         }
     }
-
-    initSecondTable();
-    showAllCharacters();
 }
 
 function clearAll() {
@@ -99,66 +103,63 @@ function clearAll() {
 
 function showAllPercents() {
     results.style.display = "none";
-    listtable.style.display = "block";
+    percentsTable.style.display = "block";
 }
 
 function showAllCharacters() {
     results.style.display = "block";
-    listtable.style.display = "none";
+    percentsTable.style.display = "none";
 }
 
 function refresh() {
     results.innerHTML = "";
-    listtable.innerHTML = "";
-    initTable();
+    percentsTable.innerHTML = "";
+    initResults();
 }
 
-
-var listtable = document.getElementById('listtable');
-var totalwidth = 400;
-var maxwidth = 300;
-var minwidth = 10;
-
-function initSecondTable() {
+function initPercentsTable() {
     for (var i = 0; i < hiragana.length; i++) {
 
         var r = hiragana[i] + "r";
         var t = hiragana[i] + "t";
         var score = (localStorage[t]) ? localStorage[r] / localStorage[t] : "NA";
 
-        var row = document.createElement('tr');
+        var row = document.createElement('div');
         row.on = true;
         row.index = i;
-        row.style.textAlign = "left";
-        var left = document.createElement('td');
+        row.className = "percentsRow";
+        var left = document.createElement('div');
+        left.className = 'leftDiv';
         left.innerHTML = hiragana[i] + ":";
 
-        var middle = document.createElement('td');
-        middle.style.width = totalwidth + "px";
-        var textspace = document.createElement('span');
-        textspace.style.float = "left";
-        textspace.style.textAlign = "right";
-        textspace.innerHTML = (localStorage[t]) ? Math.floor(score * 100) + "%" : "NA";
-        textspace.style.width = (localStorage[t]) ? Math.floor(score * (maxwidth - minwidth) + minwidth) + "px" : minwidth + "px";
+        var middle = document.createElement('div');
+        middle.className = 'middleDiv';
+        var textspace = document.createElement('div');
+        textspace.className = 'textSpace';
+        textspace.innerHTML = (score || score === 0) ? Math.floor(score * 100) + "%" : "NA";
+        var middleDivWidth = middle.offsetWidth;
+        textspace.style.width = Math.floor((score || 0)*100) + '%';
         middle.appendChild(textspace);
 
-        var right = document.createElement('td');
-        right.innerHTML = "On";
+        var right = document.createElement('div');
+        right.className = 'onoffDiv';
+        right.innerHTML = "on";
         right.onclick = function() {
             toggle(this);
         };
 
-        var clear = document.createElement('td');
+        var clear = document.createElement('div');
+        clear.className = 'clearDiv';
         clear.innerHTML = "clear";
         clear.onclick = function() {
             clearcell(this);
         };
 
         row.appendChild(left);
-        row.appendChild(middle);
-        row.appendChild(right);
         row.appendChild(clear);
-        listtable.appendChild(row);
+        row.appendChild(right);
+        row.appendChild(middle);
+        percentsTable.appendChild(row);
     }
 }
 
@@ -166,10 +167,10 @@ function toggle(m) {
     var row = m.parentNode;
     row.on = !row.on;
     if (row.on) {
-        m.innerHTML = "On";
+        m.innerHTML = "on";
         row.style.color = "rgba(255,255,255,1)";
     } else {
-        m.innerHTML = "Off";
+        m.innerHTML = "off";
         row.style.color = "rgba(255,255,255,0.5)";
     }
 }

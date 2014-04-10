@@ -1,0 +1,35 @@
+#resultspage {
+    text-align:center;
+    font-size:30px;
+}
+#containr {
+    border: 3px solid white;
+    overflow:scroll;
+    height:700px;
+}
+#percentsTable {
+    font-size:40px;
+}
+.percentsRow {
+    text-align:left;
+    width:100%;
+}
+.leftDiv {
+    float: left;
+}
+.middleDiv {
+    overflow: hidden;
+}
+.textSpace {
+    text-align:right;
+}
+.onoffDiv {
+    padding-left:50px;
+    float: right;
+    width: 100px;
+}
+/*TODO: make it background red, and only shows up when you swipe right*/
+ .clearDiv {
+    float: right;
+    width: 120px;
+}
