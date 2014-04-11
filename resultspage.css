@@ -26,12 +26,19 @@
     float: right;
     overflow: hidden;
     white-space:nowrap;
+    text-align:right;
+    background: rgba(0,0,0,0.2);
 }
-.onoffDiv, .clearDiv {
+.onoffDiv, .clearDiv, .arrow {
     display:inline-block;
 }
+.arrow {
+    float: right;
+    text-align:right;
+    width:50px;
+}
 .onoffDiv {
-    width: 200px;
+    width: 170px;
 }
  .clearDiv {
     width: 120px;

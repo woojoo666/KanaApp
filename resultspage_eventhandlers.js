@@ -1,11 +1,26 @@
 window.addEventListener('resize', resizeTable, false);
 
 var currentRow;
+var hiddenMenuClicked = false;
+
+function hiddenMenuTouchStart() {
+    hiddenMenuClicked = true;
+    event.stopPropagation();
+    event.preventDefault();
+}
+
+function hiddenMenuTouchEnd() {
+    hiddenMenuClick = false;
+    event.stopPropagation();
+    event.preventDefault();
+}
 
 function rowTouchStart(e) {
     if (e.touches.length == 1) {
-        if (currentRow)
+        if (currentRow) {
             currentRow.hiddenMenu.style.width = 0; //for the previously selected row, rehide its menu
+            currentRow.arrow.innerHTML = '<';
+        }
         currentRow = this;
     }
 }
@@ -25,7 +40,7 @@ function resizeTable() {
     percentsTable.addEventListener("touchcancel", touchendHandler, false);
 
     var startX;
-    var MAXWIDTH = 320;
+    var MAXWIDTH = 290; //onoffDiv + clearDiv
 
     function touchstartHandler(e) {
         if (e.touches.length == 1)
@@ -44,6 +59,8 @@ function resizeTable() {
         var x = e.changedTouches[0].pageX;
         if (e.changedTouches.length == 1 && startX - x < MAXWIDTH) {
             currentRow.hiddenMenu.style.width = 0;
+        } else {
+            currentRow.arrow.innerHTML = '&nbsp';
         }
     }
 })();

@@ -137,6 +137,14 @@ function initPercentsTable() {
         row.hiddenMenu = document.createElement('div');
         row.hiddenMenu.className = 'hiddenMenu';
         row.hiddenMenu.style.width = 0;
+        row.hiddenMenu.addEventListener('touchstart',hiddenMenuTouchStart,false);
+        row.hiddenMenu.addEventListener('touchmove',hiddenMenuTouchStart,false);
+        row.hiddenMenu.addEventListener('touchend',hiddenMenuTouchEnd,false);
+        row.hiddenMenu.addEventListener('touchcancel',hiddenMenuTouchEnd,false);
+
+        row.arrow = document.createElement('span');
+        row.arrow.className = 'arrow';
+        row.arrow.innerHTML = '<';
 
         var onoff = document.createElement('span');
         onoff.className = 'onoffDiv';
@@ -153,6 +161,7 @@ function initPercentsTable() {
 
         row.appendChild(left);
         row.appendChild(row.hiddenMenu);
+        row.appendChild(row.arrow);
         row.appendChild(percentDiv);
         percentsTable.appendChild(row);
     }
@@ -160,7 +169,6 @@ function initPercentsTable() {
 
 function toggle() {
     var row = this.parentNode;
-    row.on = !row.on;
     if (row.on) {
         this.innerHTML = "disable";
         row.style.color = "rgba(255,255,255,1)";
@@ -168,6 +176,7 @@ function toggle() {
         this.innerHTML = "enable";
         row.style.color = "rgba(255,255,255,0.5)";
     }
+    row.on = !row.on;
 }
 
 function clearcell() {
