@@ -27,6 +27,11 @@ var hiragana = [
     'ん'
 ];
 
+var enabled = [];
+hiragana.forEach(function() {
+    enabled.push(true);
+});
+
 var current; //which character you're on
 var drawing; //whether we're on drawing or checking screen
 
@@ -91,19 +96,22 @@ function initStorage() {
 function newChar() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    current = Math.floor(46 * Math.random());
+    do {
+        current = Math.floor(46 * Math.random());
+    } while (!(current || current === 0) || !enabled[current]);
+
     OCR.initChar(current);
 }
 
 function next() {
+    drawing = !drawing; //toggle 'drawing'
     if (drawing) {
-        ctx.fillText(hiragana[current], canvas.width / 2, canvas.height / 2);
-        check();
-    } else {
         newChar();
         Player.play();
+    } else {
+        ctx.fillText(hiragana[current], canvas.width / 2, canvas.height / 2);
+        check();
     }
-    drawing = !drawing; //toggle 'drawing'
 }
 
 var Player = (function() {

@@ -1,16 +1,8 @@
 window.addEventListener('resize', resizeTable, false);
 
 var currentRow;
-var hiddenMenuClicked = false;
 
-function hiddenMenuTouchStart() {
-    hiddenMenuClicked = true;
-    event.stopPropagation();
-    event.preventDefault();
-}
-
-function hiddenMenuTouchEnd() {
-    hiddenMenuClick = false;
+function hiddenMenuTouched() {
     event.stopPropagation();
     event.preventDefault();
 }
@@ -33,6 +25,7 @@ function resizeTable() {
 }
 
 //all touch handling in a closure
+//TODO: allow scrolling
 (function addTouchHandlers() {
     percentsTable.addEventListener("touchstart", touchstartHandler, false);
     percentsTable.addEventListener("touchmove", touchmoveHandler, false);
@@ -40,11 +33,14 @@ function resizeTable() {
     percentsTable.addEventListener("touchcancel", touchendHandler, false);
 
     var startX;
+    var prevY;
     var MAXWIDTH = 290; //onoffDiv + clearDiv
 
     function touchstartHandler(e) {
-        if (e.touches.length == 1)
+        if (e.touches.length == 1) {
             startX = e.touches[0].pageX;
+            prevY = event.touches[0].pageY;
+        }
     }
 
     function touchmoveHandler(e) {
@@ -53,6 +49,16 @@ function resizeTable() {
         if (e.touches.length == 1 && x < startX) {
             currentRow.hiddenMenu.style.width = ((startX - x < MAXWIDTH) ? startX - x : MAXWIDTH) + 'px';
         }
+
+        var nextTop = containr.scrollTop + (prevY - event.touches[0].pageY);
+        if (nextTop < 0) {
+            containr.scrollTop = 0;
+        } else if (nextTop > containr.scrollHeight - containr.clientHeight) {
+            containr.scrollTop = containr.scrollHeight - containr.clientHeight;
+        } else {
+            containr.scrollTop = nextTop;
+        }
+        prevY = event.touches[0].pageY;
     }
 
     function touchendHandler(e) {

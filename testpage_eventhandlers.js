@@ -12,6 +12,7 @@ window.addEventListener('resize', resizeCanvas, false);
     var prevY;
     var sensitivity = 10;
     var multitouch = false;
+    var canvasDivWrapper = $('canvasDivWrapper');
 
     function touchstartHandler(e) {
         if (e.touches.length > 1) {
@@ -19,23 +20,25 @@ window.addEventListener('resize', resizeCanvas, false);
             next();
         } else {
             multitouch = false;
-            var x = e.touches[0].pageX - canvasDiv.offsetLeft; //e.pageX only works for mobile safari
-            var y = e.touches[0].pageY - canvasDiv.offsetTop;
-            ctx.beginPath();
-            ctx.moveTo(x, y);
+            if (drawing) { //TODO: use jQuery.offset(), instead of manually calculating 
+                var x = e.touches[0].pageX - canvasDiv.offsetLeft - canvasDivWrapper.offsetLeft; //e.pageX only works for mobile safari
+                var y = e.touches[0].pageY - canvasDiv.offsetTop - canvasDivWrapper.offsetTop;
+                ctx.beginPath();
+                ctx.moveTo(x, y);
 
-            OCR.startStroke();
+                OCR.startStroke();
 
-            prevX = x;
-            prevY = y;
+                prevX = x;
+                prevY = y;
+            }
         }
     }
 
     function touchmoveHandler(e) {
         e.preventDefault(); //prevent scrolling
-        if (!multitouch) {
-            var x = e.touches[0].pageX - canvasDiv.offsetLeft; //e.pageX only works for mobile safari
-            var y = e.touches[0].pageY - canvasDiv.offsetTop;
+        if (!multitouch && drawing) { //TODO: use jQuery.offset(), instead of manually calculating 
+            var x = e.touches[0].pageX - canvasDiv.offsetLeft - canvasDivWrapper.offsetLeft; //e.pageX only works for mobile safari
+            var y = e.touches[0].pageY - canvasDiv.offsetTop - canvasDivWrapper.offsetTop;
             ctx.lineTo(x, y);
             ctx.stroke();
 
@@ -57,7 +60,7 @@ window.addEventListener('resize', resizeCanvas, false);
     }
 
     function touchendHandler() {
-        if (!multitouch) {
+        if (!multitouch && drawing) {
             OCR.finishStroke();
         }
     }

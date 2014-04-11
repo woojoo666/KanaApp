@@ -116,7 +116,6 @@ function initPercentsTable() {
         var score = (localStorage[t]) ? localStorage[r] / localStorage[t] : "NA";
 
         var row = document.createElement('div');
-        row.on = true;
         row.index = i;
         row.className = "percentsRow";
         row.addEventListener("touchstart", rowTouchStart, false);
@@ -137,10 +136,10 @@ function initPercentsTable() {
         row.hiddenMenu = document.createElement('div');
         row.hiddenMenu.className = 'hiddenMenu';
         row.hiddenMenu.style.width = 0;
-        row.hiddenMenu.addEventListener('touchstart',hiddenMenuTouchStart,false);
-        row.hiddenMenu.addEventListener('touchmove',hiddenMenuTouchStart,false);
-        row.hiddenMenu.addEventListener('touchend',hiddenMenuTouchEnd,false);
-        row.hiddenMenu.addEventListener('touchcancel',hiddenMenuTouchEnd,false);
+        row.hiddenMenu.addEventListener('touchstart',hiddenMenuTouched,false);
+        row.hiddenMenu.addEventListener('touchmove',hiddenMenuTouched,false);
+        row.hiddenMenu.addEventListener('touchend',hiddenMenuTouched,false);
+        row.hiddenMenu.addEventListener('touchcancel',hiddenMenuTouched,false);
 
         row.arrow = document.createElement('span');
         row.arrow.className = 'arrow';
@@ -149,12 +148,12 @@ function initPercentsTable() {
         var onoff = document.createElement('span');
         onoff.className = 'onoffDiv';
         onoff.innerHTML = "disable";
-        onoff.onclick = toggle;
+        onoff.addEventListener('touchend',toggle,true); //'usecapture' to true to ensure this fires first
 
         var clear = document.createElement('span');
         clear.className = 'clearDiv';
         clear.innerHTML = "clear";
-        clear.onclick = clearcell;
+        clear.addEventListener('touchend',clearcell,true); //'usecapture' to true to ensure this fires first
 
         row.hiddenMenu.appendChild(onoff);
         row.hiddenMenu.appendChild(clear);
@@ -167,20 +166,21 @@ function initPercentsTable() {
     }
 }
 
+//doesn't actually do anything, just looks like it does
 function toggle() {
-    var row = this.parentNode;
-    if (row.on) {
+    var row = this.parentNode.parentNode;
+    enabled[row.index] = !enabled[row.index];
+    if (enabled[row.index]) {
         this.innerHTML = "disable";
         row.style.color = "rgba(255,255,255,1)";
     } else {
         this.innerHTML = "enable";
         row.style.color = "rgba(255,255,255,0.5)";
     }
-    row.on = !row.on;
 }
 
 function clearcell() {
-    var row = this.parentNode;
+    var row = this.parentNode.parentNode;
     var i = row.index;
     var r = hiragana[i] + "r";
     var t = hiragana[i] + "t";
