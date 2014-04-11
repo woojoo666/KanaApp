@@ -1,10 +1,10 @@
 @font-face {
     font-family: Kana;
-    src: url(AozoraMincho-bold.ttf);
+    src: url(fonts/AozoraMincho-bold.ttf);
 }
 @font-face {
     font-family: Main;
-    src: url(homework%20normal.TTF);
+    src: url(fonts/homework%20normal.TTF);
 }
 html, body {
     font-family: Main;

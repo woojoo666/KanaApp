@@ -4,24 +4,30 @@ CACHE MANIFEST
 
 CACHE:
 index.html
-maindiv.js
-resultsdiv.js
-icons/favicon.png
-/iOS%20Web%20App/Finalfinalfinalfinal/KFhimaji.otf
+index.css
+testpage.css
+testpage.js
+testpage_eventhandlers.js
+testpage_OCR.js
+resultspage.css
+resultspage.js
+resultspage_eventhandlers.js
 
-Images/Back%20Button.png
+fonts/AozoraMincho-bold.ttf
+fonts/homework%20normal.TTF
+
+icons/favicon.ico
+
 Images/Background%20Scroll%20-%20bordered.png
-Images/Background%20Scroll%20-%20gradient.png
-Images/Continue.png
-Images/Header.png
 Images/Header2.png
 Images/Loading.png
-Images/Main%20Scroll%20-%20bordered.png
-Images/Playbutton%20Back.png
-Images/Playbutton%20Background.png
-Images/Playbutton%20Off.png
-Images/Playbutton%20On.png
+Images/Continue.png
 Images/Title%20Overlay.png
+Images/Back%20Button.png
+Images/Playbutton%20On.png
+Images/Playbutton%20Off.png
+Images/Playbutton%20Back.png
+Images/qrcode.png
 
 sounds/1.mp3
 sounds/2.mp3
