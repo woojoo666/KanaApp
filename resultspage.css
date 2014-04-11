@@ -23,6 +23,7 @@
 }
 .percentDiv {
     overflow: hidden;
+    font-size:90px;
 }
 .percent {
     text-align:right;
