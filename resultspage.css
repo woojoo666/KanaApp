@@ -6,6 +6,9 @@
     border: 3px solid white;
     overflow:scroll;
 }
+#characterTable {
+    font-family: Kana;
+}
 #percentsTable {
     font-size:40px;
 }
@@ -14,6 +17,7 @@
     width:100%;
 }
 .leftDiv {
+    font-family: Kana;
     float: left;
 }
 .percentDiv {

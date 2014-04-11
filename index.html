@@ -14,125 +14,7 @@
     <link rel="icon" type="image/png" href="icons/favicon.png" />
 
     <title>Hiragana Draw</title>
-    <style id="sty">
-    @font-face {
-        font-family: Kozuko;
-        src: url(KFhimaji.otf);
-    }
-    html, body {
-        font-family: Kozuko;
-        overflow:hidden;
-    }
-    .page {
-        background: url('Images/Background Scroll - bordered.png');
-        position: absolute;
-        color:white;
-        width: 100%;
-        height: 100%;
-        left:0;
-        top:0;
-        margin-left: 20;
-        z-index: 1;
-        overflow: hidden;
-    }
-    #menupage {
-        text-align:center;
-        font-size:90px;
-    }
-    #settingspage {
-        text-align:center;
-        font-size:60px;
-        overflow:hidden;
-    }
-    #maintitle {
-        width:640px;
-        position: absolute;
-        left:0;
-        top:220px;
-        z-index:1;
-        -webkit-opacity: 1;
-        -moz-opacity: 1;
-        opacity: 1;
-        -webkit-transition: all 1s ease;
-        -moz-transition: all 1s ease;
-        -ms-transition: all 1s ease;
-        -o-transition: all 1s ease;
-        transition: all 1s ease;
-    }
-    #non-mobile {
-        z-index: 3;
-        text-align:center;
-    }
-    #overlay {
-        z-index: 4;
-        text-align:center;
-        position: relative;
-        top:0;
-        left:0;
-        width: 100%;
-        height: 100%;
-    }
-    #loading {
-        margin-top:700px;
-        z-index:1
-    }
-    .menuOption {
-        margin-top: 0px;
-        margin-bottom: 50px;
-    }
-    #backbutton {
-        width:100px;
-        position:absolute;
-        left:10px;
-        top:10px;
-        z-index:2;
-        display:none
-    }
-    .titleWrapper {
-        display: table-row;
-        position: relative;
-        width: 100%;
-        height: 168px;
-    }
-    .title {
-        position:absolute;
-        font-size:140px;
-        margin-top:0;
-        right: 20px;
-        top:-10px;
-    }
-    .titlehead {
-        position: absolute;
-        height: 168px;
-        width: 540px;
-        right: 0;
-        overflow:hidden;
-        background: url('Images/Header2.png');
-    }
-    .tableWrapper {
-        display: table;
-        width: 100%;
-        height: 100%;
-    }
-    .bottomRow {
-        display: table-row;
-        width:100%;
-        height:100%;
-    }
-    .wrapper {
-        width: 100%;
-        height: 100%;
-        position:relative;
-    }
-    .marginWrapper {
-        position: absolute;
-        top:0;
-        bottom:0;
-        left:0;
-        right:0;
-        margin:10px;
-    }
-    </style>
+    <link rel="stylesheet" type="text/css" href="index.css" />
     <link rel="stylesheet" type="text/css" href="testpage.css" />
     <link rel="stylesheet" type="text/css" href="resultspage.css" />
 </head>
@@ -144,7 +26,7 @@
         <img id="qrcode" src="Images/qrcode.png">
     </div>
 
-    <div id="menupage" class="page">
+    <div id="menupage" class="page" style="display:block;">
         <div id="overlay">
             <img id="loading" src="Images/Loading.png">
         </div>
@@ -157,7 +39,7 @@
 
     <img id="backbutton" src="Images/Back Button.png" onclick="jumpTo('menupage');">
 
-    <div id="testpage" class="page" style="display:none;">
+    <div id="testpage" class="page">
         <div class="tableWrapper">
             <div class='titleWrapper'>
                 <div class="titlehead">
@@ -177,7 +59,7 @@
         </div>
     </div>
 
-    <div id="resultspage" class="page" style="display:none;">
+    <div id="resultspage" class="page">
         <div class="tableWrapper">
             <div class='titleWrapper'>
                 <div class="titlehead">
@@ -198,7 +80,7 @@
         </div>
     </div>
 
-    <div id='settingspage' class="page" style="display:none;">
+    <div id='settingspage' class="page">
         <div class='titleWrapper'>
             <div class="titlehead">
                 <p style='right: -50px;' class="title">Settings</p>
@@ -240,6 +122,7 @@
     }
 
     function reorient() {
+        /* NOT WORKING...
         if (window.orientation % 180 == 0) { //portrait mode, reset rotation
             document.body.style.webkitTransform = "";
         } else if (window.orientation == -90) { //clockwise rotation
@@ -250,18 +133,18 @@
             var center = findCenter([0, 0], [0, 640], false);
             document.body.style.webkitTransformOrigin = (center[0] - 30) + "px " + (center[1] - 20) + "px";
             document.body.style.webkitTransform = 'rotate(-90deg)';
-        }
+        }*/
     }
 
-    function init() { //TODO: reenable orientation and mobile check
+    function init() {
         document.getElementById('player').volume = 0.5;
 
         jumpTo('non-mobile');
-        //if (!window.mobilecheck())
-        //return;
+        if (!window.mobilecheck())
+            return;
 
         jumpTo('menupage');
-        //reorient();
+        reorient();
         initTest();
         initResults();
         $('overlay').onclick = function() {

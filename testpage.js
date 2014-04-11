@@ -70,7 +70,7 @@ function initCanvas() {
     ctx.lineCap = 'round';
     ctx.globalAlpha = 1;
 
-    ctx.font = '500px Kozuko';
+    ctx.font = '500px Kana';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillStyle = 'rgba(0,0,255,0.5)';

@@ -1,4 +1,4 @@
-var results = $("characterTable");
+var characterTable = $("characterTable");
 var containr = $("containr");
 var percentsTable = document.getElementById('percentsTable');
 
@@ -8,10 +8,7 @@ var cellWidth = 85;
 var maxFont = 85;
 var cellspace = 20;
 
-
 var minData = 3; //minimum data points for displaying score in resultpage
-
-var prevY;
 
 function initResults() {
     initCharacterTable();
@@ -20,8 +17,8 @@ function initResults() {
 }
 
 function initCharacterTable() {
-    results.cellpadding = results.border = "0";
-    results.cellSpacing = cellspace;
+    characterTable.cellpadding = characterTable.border = "0";
+    characterTable.cellSpacing = cellspace;
 
     containr.style.overflow = "scroll";
 
@@ -56,7 +53,7 @@ function initCharacterTable() {
 
 
         if (i % cols == cols - 1 || i == hiragana.length - 1) {
-            results.appendChild(row);
+            characterTable.appendChild(row);
             row = document.createElement("tr");
         }
     }
@@ -75,17 +72,17 @@ function clearAll() {
 }
 
 function showAllPercents() {
-    results.style.display = "none";
+    characterTable.style.display = "none";
     percentsTable.style.display = "block";
 }
 
 function showAllCharacters() {
-    results.style.display = "block";
+    characterTable.style.display = "block";
     percentsTable.style.display = "none";
 }
 
 function refresh() {
-    results.innerHTML = "";
+    characterTable.innerHTML = "";
     percentsTable.innerHTML = "";
     initResults();
 }
