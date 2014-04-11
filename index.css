@@ -9,6 +9,7 @@
 html, body {
     font-family: Main;
     overflow:hidden;
+    font-size:30px;
 }
 .page {
     display:none;
@@ -49,6 +50,8 @@ html, body {
     transition: all 1s ease;
 }
 #non-mobile {
+    font-family:Georgia,serif;
+    font-size:20px;
     z-index: 3;
     text-align:center;
 }
