@@ -13,8 +13,6 @@ var minData = 3; //minimum data points for displaying score in resultpage
 
 var prevY;
 
-window.addEventListener('resize', resizeTable, false);
-
 /* ISN'T DOING ANYTHING...
         containr.ontouchstart = function(event) {
             prevY = event.touches[0].pageY;
@@ -32,13 +30,6 @@ window.addEventListener('resize', resizeTable, false);
             }
             prevY = event.touches[0].pageY;
         };*/
-
-function resizeTable() {
-    containr.removeChild(results);
-    results = document.createElement('table');
-    containr.appendChild(results);
-    initResults();
-}
 
 function initResults() {
     initCharacterTable();
@@ -128,55 +119,59 @@ function initPercentsTable() {
         row.on = true;
         row.index = i;
         row.className = "percentsRow";
+        row.addEventListener("touchstart", rowTouchStart, false);
+
         var left = document.createElement('div');
         left.className = 'leftDiv';
         left.innerHTML = hiragana[i] + ":";
 
-        var middle = document.createElement('div');
-        middle.className = 'middleDiv';
-        var textspace = document.createElement('div');
-        textspace.className = 'textSpace';
-        textspace.innerHTML = (score || score === 0) ? Math.floor(score * 100) + "%" : "NA";
-        var middleDivWidth = middle.offsetWidth;
-        textspace.style.width = Math.floor((score || 0)*100) + '%';
-        middle.appendChild(textspace);
+        var percentDiv = document.createElement('div');
+        percentDiv.className = 'percentDiv';
 
-        var right = document.createElement('div');
-        right.className = 'onoffDiv';
-        right.innerHTML = "disable";
-        right.onclick = function() {
-            toggle(this);
-        };
+        var percent = document.createElement('div');
+        percent.className = 'percent';
+        percent.innerHTML = (score || score === 0) ? Math.floor(score * 100) + "%" : "NA";
+        percent.style.width = Math.floor((score || 0)*100) + '%';
+        percentDiv.appendChild(percent);
 
-        var clear = document.createElement('div');
+        row.hiddenMenu = document.createElement('div');
+        row.hiddenMenu.className = 'hiddenMenu';
+        row.hiddenMenu.style.width = 0;
+
+        var onoff = document.createElement('span');
+        onoff.className = 'onoffDiv';
+        onoff.innerHTML = "disable";
+        onoff.onclick = toggle;
+
+        var clear = document.createElement('span');
         clear.className = 'clearDiv';
         clear.innerHTML = "clear";
-        clear.onclick = function() {
-            clearcell(this);
-        };
+        clear.onclick = clearcell;
+
+        row.hiddenMenu.appendChild(onoff);
+        row.hiddenMenu.appendChild(clear);
 
         row.appendChild(left);
-        row.appendChild(clear);
-        row.appendChild(right);
-        row.appendChild(middle);
+        row.appendChild(row.hiddenMenu);
+        row.appendChild(percentDiv);
         percentsTable.appendChild(row);
     }
 }
 
-function toggle(m) {
-    var row = m.parentNode;
+function toggle() {
+    var row = this.parentNode;
     row.on = !row.on;
     if (row.on) {
-        m.innerHTML = "disable";
+        this.innerHTML = "disable";
         row.style.color = "rgba(255,255,255,1)";
     } else {
-        m.innerHTML = "enable";
+        this.innerHTML = "enable";
         row.style.color = "rgba(255,255,255,0.5)";
     }
 }
 
-function clearcell(m) {
-    var row = m.parentNode;
+function clearcell() {
+    var row = this.parentNode;
     var i = row.index;
     var r = hiragana[i] + "r";
     var t = hiragana[i] + "t";

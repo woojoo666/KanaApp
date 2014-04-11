@@ -16,20 +16,24 @@
 .leftDiv {
     float: left;
 }
-.middleDiv {
+.percentDiv {
     overflow: hidden;
 }
-.textSpace {
+.percent {
     text-align:right;
 }
-/*TODO: make it only show up when you swipe right*/
-.onoffDiv {
-    padding-left:50px;
+.hiddenMenu {
     float: right;
+    overflow: hidden;
+    white-space:nowrap;
+}
+.onoffDiv, .clearDiv {
+    display:inline-block;
+}
+.onoffDiv {
     width: 200px;
 }
-/*TODO: make it background red, and only shows up when you swipe right*/
  .clearDiv {
-    float: right;
     width: 120px;
+    color: red;
 }
