@@ -51,7 +51,8 @@ function initTest() {
     initCanvas();
     initStorage();
 
-    ctx.font = '30px Kozuko';
+    ctx.font = '30px Georgia';
+    ctx.fillStyle = 'rgba(0,0,0,0.75)';
     ctx.fillText('Listen for audio cue, and write', canvas.width / 2, canvas.height / 2 - 130);
     ctx.fillText('the corresponding hiragana', canvas.width / 2, canvas.height / 2 - 100);
     ctx.fillText('(with correct stroke order!!)', canvas.width / 2, canvas.height / 2 - 70);
@@ -59,21 +60,22 @@ function initTest() {
     ctx.fillText('to check your answer. 2-finger-tap', canvas.width / 2, canvas.height / 2 + 10);
     ctx.fillText('again to move onto next letter', canvas.width / 2, canvas.height / 2 + 40);
     ctx.fillText('Two-finger-tap to start', canvas.width / 2, canvas.height / 2 + 170);
-    ctx.font = '500px Kozuko';
+    ctx.font = '500px Kana';
+    ctx.fillStyle = 'rgba(0,0,0,0.5)';
 }
 
 function initCanvas() {
     resizeCanvas();
 
-    ctx.strokeStyle = "red";
-    ctx.lineWidth = 20;
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 30;
     ctx.lineCap = 'round';
     ctx.globalAlpha = 1;
 
     ctx.font = '500px Kana';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillStyle = 'rgba(0,0,255,0.5)';
+    ctx.fillStyle = 'black';
 
 }
 
@@ -109,7 +111,6 @@ function next() {
         newChar();
         Player.play();
     } else {
-        ctx.fillText(hiragana[current], canvas.width / 2, canvas.height / 2);
         check();
     }
 }
@@ -156,21 +157,7 @@ function check() {
     if (correct)
         localStorage[r]++;
 
-    //draw correct/wrong symbols
-    if (correct) {
-        ctx.strokeStyle = "rgba(100,255,100,0.75)";
-        ctx.beginPath();
-        ctx.moveTo(canvas.width / 4, canvas.height / 2);
-        ctx.lineTo(canvas.width / 2, 3 * canvas.height / 4);
-        ctx.lineTo(5 * canvas.width / 6, canvas.height / 6);
-        ctx.stroke();
-    } else {
-        ctx.strokeStyle = "red";
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(canvas.width, canvas.height);
-        ctx.moveTo(0, canvas.height);
-        ctx.lineTo(canvas.width, 0);
-        ctx.stroke();
-    }
+    //if you're right, draw in green, otherwise draw in red
+    ctx.fillStyle = (correct)? "rgba(100,255,100,0.75)" : "rgba(255,0,0,0.75)";
+    ctx.fillText(hiragana[current], canvas.width / 2, canvas.height / 2);
 }

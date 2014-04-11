@@ -5,7 +5,7 @@ var percentsTable = document.getElementById('percentsTable');
 var cols;
 
 var cellWidth = 85;
-var maxFont = 85;
+var maxFont = 100;
 var cellspace = 20;
 
 var minData = 3; //minimum data points for displaying score in resultpage

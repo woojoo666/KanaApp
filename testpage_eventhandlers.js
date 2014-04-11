@@ -24,6 +24,7 @@ window.addEventListener('resize', resizeCanvas, false);
                 var x = e.touches[0].pageX - canvasDiv.offsetLeft - canvasDivWrapper.offsetLeft; //e.pageX only works for mobile safari
                 var y = e.touches[0].pageY - canvasDiv.offsetTop - canvasDivWrapper.offsetTop;
                 ctx.beginPath();
+                ctx.strokeStyle = "black";
                 ctx.moveTo(x, y);
 
                 OCR.startStroke();
@@ -50,7 +51,7 @@ window.addEventListener('resize', resizeCanvas, false);
                 OCR.partialStroke(changeX, changeY);
 
                 ctx.beginPath();
-                ctx.strokeStyle = "red";
+                ctx.strokeStyle = "black";
                 ctx.moveTo(x, y);
 
                 prevX = x;

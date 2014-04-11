@@ -7,7 +7,7 @@
     src: url(homework%20normal.TTF);
 }
 html, body {
-    font-family: Kana;
+    font-family: Main;
     overflow:hidden;
 }
 .page {
@@ -26,11 +26,11 @@ html, body {
 }
 #menupage {
     text-align:center;
-    font-size:90px;
+    font-size:120px;
 }
 #settingspage {
     text-align:center;
-    font-size:60px;
+    font-size:90px;
     overflow:hidden;
 }
 #maintitle {
@@ -85,7 +85,7 @@ html, body {
 }
 .title {
     position:absolute;
-    font-size:140px;
+    font-size:160px;
     margin-top:0;
     right: 20px;
     top:-10px;
