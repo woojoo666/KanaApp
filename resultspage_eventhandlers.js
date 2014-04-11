@@ -25,12 +25,11 @@ function resizeTable() {
 }
 
 //all touch handling in a closure
-//TODO: allow scrolling
 (function addTouchHandlers() {
-    percentsTable.addEventListener("touchstart", touchstartHandler, false);
-    percentsTable.addEventListener("touchmove", touchmoveHandler, false);
-    percentsTable.addEventListener("touchend", touchendHandler, false);
-    percentsTable.addEventListener("touchcancel", touchendHandler, false);
+    containr.addEventListener("touchstart", touchstartHandler, false);
+    containr.addEventListener("touchmove", touchmoveHandler, false);
+    containr.addEventListener("touchend", touchendHandler, false);
+    containr.addEventListener("touchcancel", touchendHandler, false);
 
     var startX;
     var prevY;
@@ -46,7 +45,7 @@ function resizeTable() {
     function touchmoveHandler(e) {
         e.preventDefault(); //prevent scrolling
         var x = e.touches[0].pageX;
-        if (e.touches.length == 1 && x < startX) {
+        if (currentRow && e.touches.length == 1 && x < startX) {
             currentRow.hiddenMenu.style.width = ((startX - x < MAXWIDTH) ? startX - x : MAXWIDTH) + 'px';
         }
 
@@ -63,10 +62,12 @@ function resizeTable() {
 
     function touchendHandler(e) {
         var x = e.changedTouches[0].pageX;
-        if (e.changedTouches.length == 1 && startX - x < MAXWIDTH) {
-            currentRow.hiddenMenu.style.width = 0;
-        } else {
-            currentRow.arrow.innerHTML = '&nbsp';
+        if (currentRow) { //in case we're on characters table and there's no current Row
+            if (e.changedTouches.length == 1 && startX - x < MAXWIDTH) {
+                currentRow.hiddenMenu.style.width = 0;
+            } else {
+                currentRow.arrow.innerHTML = '&nbsp';
+            }
         }
     }
 })();

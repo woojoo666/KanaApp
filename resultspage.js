@@ -13,24 +13,6 @@ var minData = 3; //minimum data points for displaying score in resultpage
 
 var prevY;
 
-/* ISN'T DOING ANYTHING...
-        containr.ontouchstart = function(event) {
-            prevY = event.touches[0].pageY;
-        };
-
-        containr.ontouchmove = function(event) {
-            e.preventDefault();
-            var nextTop = containr.scrollTop + (prevY - event.touches[0].pageY);
-            if (nextTop < 0) {
-                containr.scrollTop = 0;
-            } else if (nextTop > containr.scrollHeight - containr.clientHeight) {
-                containr.scrollTop = containr.scrollHeight - containr.clientHeight;
-            } else {
-                containr.scrollTop = nextTop;
-            }
-            prevY = event.touches[0].pageY;
-        };*/
-
 function initResults() {
     initCharacterTable();
     initPercentsTable();
